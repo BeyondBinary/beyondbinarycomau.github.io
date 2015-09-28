@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-    <title>Beyond Binary</title>
+    <title>Beyond Binary - Advisory: Seagate NAS Remote Code Execution Vulnerability</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         
-    <link rel="stylesheet" href="css/style.css?7" />
+    <link rel="stylesheet" href="/css/style.css?7" />
+    <link rel="icon" type="iamge/png" href="https://beyondbinary.io/images/favicon.png" />
+    <link rel="shortcut" type="iamge/png" href="https://beyondbinary.io/images/favicon.png" />
+    <link rel="apple-touch-icon" type="iamge/png" href="https://beyondbinary.io/images/favicon.png" />
+    <link rel="canonical" href="https://beyondbinary.io/services/" />
 
     <!--[if lt IE 9]>
         <script src="/js/lib/html5shiv.js"></script>
@@ -14,66 +18,61 @@
     <![endif]-->
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="row">
-                <div class="table-row">
-                    <div class="col-xs-4 col-sm-3 cell-xs">
-                        <a href="index.html">
-                            <img src="images/beyond-binary-logo.png" srcset="images/beyond-binary-logo@2x.png 2x" alt="" />
-                        </a>
-                    </div>
-                    <div class="col-xs-8 col-sm-9 cell-xs text-right position-static">
-                        
-                        <ul class="header-navigation">
-                            <li><a href="index.html">home</a></li>
-                            <li><a href="about.html">about us</a></li>
-                            <li><a href="services.html">services</a></li>
-                            <li><a href="news.html">news</a></li>
-                            <li><a href="contact-us.html">contact us</a></li>
-                        </ul>
-
-                        <svg id="menu-burger" width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                            <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.0916789,20.818994 53.8166421,0"/>
-                            <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.1969746,31.909063 53.8166424,0"/>
-                            <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.0916788,42.95698 53.8166422,0"/>
-                        </svg>
-                    </div>
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="table-row">
+                <div class="col-xs-4 col-sm-3 cell-xs">
+                    <a href="/">
+                        <img src="/images/beyond-binary-logo.png" srcset="/images/beyond-binary-logo@2x.png 2x" alt="" />
+                    </a>
+                </div>
+                <div class="col-xs-8 col-sm-9 cell-xs text-right position-static">
+                    <ul class="header-navigation">
+                        <li><a href="/">home</a></li>
+                        <li><a href="/about/">about</a></li>
+                        <li><a href="/services/">services</a></li>
+                        <li><a href="/articles/">articles</a></li>
+                        <li><a href="/contact/">contact</a></li>
+                        <li><a href="/media/">media</a></li>
+                    </ul>
+                    <svg id="menu-burger" width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.0916789,20.818994 53.8166421,0"/>
+                        <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.1969746,31.909063 53.8166424,0"/>
+                        <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.0916788,42.95698 53.8166422,0"/>
+                    </svg>
                 </div>
             </div>
+        </div>
+    </div>
+    <img class="sticky-morph" src="/images/sticky-morph.png" srcset="/images/sticky-morph@2x.png 2x" alt="" />
+</header>
 
-                    </div>
-
-        <img class="sticky-morph" src="images/sticky-morph.png" srcset="images/sticky-morph@2x.png 2x" alt="" />
-    </header>
 <section>
     <div class="container">
-
         <h2 class="blue-line-through-md"><span>Advisories &amp; news&nbsp;</span></h2>
-
         <div class="row">
-
             <article class="col-md-7">
                 <header>
                     <span class="date">March 1 2015</span>
                     <h1>Advisory: Seagate NAS Remote Code Execution Vulnerability</h1>
-                    <a class="tag" href="#">exploit</a>
-                    <a class="tag" href="#">seagate</a>
-                    <a class="tag" href="#">cve</a>
+                    <a class="tag" href="/tags/advisory/">Advisory</a>
+                    <a class="tag" href="/tags/cve/">CVE</a>
+                    <a class="tag" href="/tags/exploit/">Exploit</a>
+                    <a class="tag" href="/tags/seagate/">Seagate</a>
                 </header>
 
-
-                <h2 id="overview:4223bba20a59cc79ac2e4207cf6bf5f6">Overview</h2>
+                <h2>Overview</h2>
 
                 <p><a href="http://www.seagate.com/">Seagate</a> is a well-known vendor of hardware solutions, with products available worldwide. Its line of <a href="https://en.wikipedia.org/wiki/Network-attached_storage">NAS</a> products targeted at businesses is called <a href="http://www.seagate.com/au/en/support/external-hard-drives/network-storage/business-storage-2-bay-nas/">Business Storage 2-Bay NAS</a>. These can be found inside home and business networks, and in many cases they are publicly exposed.</p>
 
                 <p>Products in this line that run firmware versions up to and including version 2014.00319 were found to be vulnerable to a number of issues that allow for remote code execution under the context of the root user. These vulnerabilities are exploitable without requiring any form of authorisation on the device.</p>
 
-                <h2 id="updates:4223bba20a59cc79ac2e4207cf6bf5f6">Updates</h2>
+                <h2>Updates</h2>
 
                 <p>This document was updated on 11th June 2015 to include links to the released firmware that attempts to address the issues in this advisory.</p>
 
-                <h2 id="vulnerability-details:4223bba20a59cc79ac2e4207cf6bf5f6">Vulnerability Details</h2>
+                <h2>Vulnerability Details</h2>
 
                 <p>Seagate Business NAS products come with a web-enabled management application. This application lets administrators perform the usual device configuration functions, such as adding users, setting up access control, managing files, and more.</p>
 
@@ -87,19 +86,19 @@
 
                 <p>All three of these technologies are clearly out of date, and the listed versions of PHP and CodeIgniter are known to have security issues. On top of these technologies sits a custom PHP application, which itself contains a number of security-related issues. Details of each key issue are listed below.</p>
 
-                <h3 id="php-5-2-3:4223bba20a59cc79ac2e4207cf6bf5f6">PHP 5.2.3</h3>
+                <h3>PHP 5.2.3</h3>
 
                 <p>Versions of PHP prior to 5.3.4 allow users to specify file paths that include a NULL byte (<a href="http://www.cvedetails.com/cve/CVE-2006-7243/">CVE-2006-7243</a>). This issue allows user-controlled data to prematurely terminate file paths, allowing for full control over the file extension.</p>
 
                 <p>This issue is regularly abused to include unintended files in PHP source code via functions such as <code>require()</code> and <code>include()</code>.</p>
 
-                <h3 id="codeigniter-2-1-0:4223bba20a59cc79ac2e4207cf6bf5f6">CodeIgniter 2.1.0</h3>
+                <h3>CodeIgniter 2.1.0</h3>
 
                 <p>Versions of CodeIgniter prior to 2.2.0 create session tokens that are made up of a serialised PHP associative array (hash) that has been encrypted using a custom algorithm. This PHP hash contains user-controllable data, which makes it possible for users to <a href="https://www.mehmetince.net/codeigniter-object-injection-vulnerability-via-encryption-key/">extract the encryption key</a> and decrypt the content of the cookie (<a href="https://www.dionach.com/blog/codeigniter-session-decoding-vulnerability">CVE-2014-8686</a>). Once decrypted, users can modify the content of the cookie and re-encrypt it prior to submitting it back to the server, resulting in other potential attack vectors including PHP object injection.</p>
 
                 <p>A unique encryption key value should be used for each installation of a CodeIgniter application. However, in the case of this line of NAS products, the encryption key that is used is exactly the same for every instance (<a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-8687">CVE-2014-8687</a>).</p>
 
-                <h3 id="custom-web-application:4223bba20a59cc79ac2e4207cf6bf5f6">Custom web application</h3>
+                <h3>Custom web application</h3>
 
                 <p>The custom web application does not appear to maintain session-related information on the web server side. All of the information relevant to a user session is stored inside the session cookie prior to it being encrypted and sent to the browser. The PHP hash inside the cookie contains a number of key/value entries, including the following:</p>
 
@@ -119,7 +118,7 @@
 
                 <p>Finally, the web application is being served by an instance of Lighttpd that is running under the context of the <code>root</code> user. Hence, any successful exploitation results in activities being conducted as <code>root</code>.</p>
 
-                <h2 id="affected-versions:4223bba20a59cc79ac2e4207cf6bf5f6">Affected versions</h2>
+                <h2>Affected versions</h2>
 
                 <p>Two versions of the NAS firmware were tested and shown to be vulnerable. Those versions were:</p>
 
@@ -130,7 +129,7 @@
 
                 <p>At the time of writing, it is believed that all versions prior to 2014.00319 are highly likely to contain the same vulnerabilities.</p>
 
-                <h2 id="cve-identifiers:4223bba20a59cc79ac2e4207cf6bf5f6">CVE Identifiers</h2>
+                <h2>CVE Identifiers</h2>
 
                 <p>This advisory makes use of prior work referenced in the following CVEs:</p>
 
@@ -141,7 +140,7 @@
 
                 <p>The vulnerability discovered via the reuse of the session cookie encryption key was allocated the identifier <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2014-8687">CVE-2014-8687</a> by MITRE.</p>
 
-                <h2 id="exploitation:4223bba20a59cc79ac2e4207cf6bf5f6">Exploitation</h2>
+                <h2>Exploitation</h2>
 
                 <p>It is simple to exploit the issues listed above to gain arbitrary code execution on the device as the <code>root</code> user. The key steps required to achieve this are:</p>
 
@@ -187,10 +186,10 @@
                 <p>The following image shows a sample run of the Metasploit module:</p>
 
                 <p class="img-full-screen-sm">
-                    <img src="https://beyondbinary.io/images/bbsec001/msf-sample-run.png" alt="Metasploit module sample run" />
+                    <img src="/images/bbsec001/msf-sample-run.png" alt="Metasploit module sample run" />
                 </p>
 
-                <h2 id="remediation:4223bba20a59cc79ac2e4207cf6bf5f6">Remediation</h2>
+                <h2>Remediation</h2>
 
                 <p>At the time of writing there is no firmware version available for download that contains fixes for the issues listed in this advisory. It is recommended that consumers of these Seagate Business NAS products (and other products using vulnerable firmware) ensure that devices are not accessible via the public Internet. For internal use, it is recommended that the devices be located behind a firewall configured to allow only a trusted set of IP addresses to connect to the web interface.</p>
 
@@ -199,109 +198,95 @@
 
                 <p>During April 2015 Seagate released <a href="http://www.seagate.com/au/en/support/downloads/item/business-nas-4bay-firmware-master-dl/">firmware</a> that attempts to resolve these issues. Please see the timeline below.</p>
 
-                <h2 id="exposure:4223bba20a59cc79ac2e4207cf6bf5f6">Exposure</h2>
+                <h2>Exposure</h2>
 
                 <p>At the time of writing, <a href="https://www.shodan.io/">Shodan</a> reports that there are over 2,500 publicly exposed devices on the Internet that are likely to be vulnerable.</p>
 
-                <h2 id="potential-ramifications:4223bba20a59cc79ac2e4207cf6bf5f6">Potential Ramifications</h2>
+                <h2>Potential Ramifications</h2>
 
                 <p>It appears that the NAS products do not integrate with the likes of Active Directory or LDAP. As a result, they need to store passwords for any users that require access. Passwords are hashed using DES and stored in the <code>/etc/shadow</code> file.</p>
 
                 <p>Instances of the NAS housed inside an organisation are likely to contain passwords that are reused by domain users. The DES hashes are very easy to crack, and hence an attacker could easily acquire domain credentials once the NAS has been compromised.</p>
 
-                <h2 id="notes:4223bba20a59cc79ac2e4207cf6bf5f6">Notes</h2>
+                <h2>Notes</h2>
 
                 <p>Initial attempts to disclose the above issues to the vendor proved time consuming and unproductive. Staff on the front-line support team repeatedly failed to direct the query to the relevant point of contact. In light of this, a direct security contact was identified using open intelligence, and front-line support was bypassed. This employee handled the query professionally and&nbsp;demonstrated a high level of concern in the early stages.&nbsp;</p>
 
-                <h2 id="timeline:4223bba20a59cc79ac2e4207cf6bf5f6">Timeline</h2>
+                <h2>Timeline</h2>
 
                 <ul>
                     <li><strong>07th October 2014</strong>
-
                         <ul>
-                            <li>Initial bug discovery.</li>
+                          <li>Initial bug discovery.</li>
                         </ul>
                     </li>
                     <li><strong>08th October 2014</strong>
-
                         <ul>
                             <li>Simple Proof of Concept exploit created.</li>
                         </ul>
                     </li>
                     <li><strong>16th October 2014</strong>
-
                         <ul>
                             <li>Enhanced exploit created.</li>
                         </ul>
                     </li>
                     <li><strong>18th October 2014</strong>
-
                         <ul>
                             <li>Contacted vendor via website, requested PGP for secure communications.</li>
                             <li>Contacted MITRE to discuss potential CVE identifier allocation.</li>
                         </ul>
                     </li>
                     <li><strong>20th October 2014</strong>
-
                         <ul>
                             <li>Contacted vendor via Twitter, requested PGP for secure communications.</li>
                             <li>Vendor responded via email, requested disclosure via non-encrypted channels.</li>
                         </ul>
                     </li>
                     <li><strong>22nd October 2014</strong>
-
                         <ul>
                             <li>Contacted vendor via email, disclosed all details of the issues found.</li>
                             <li>Beyond Binary established 100 day public disclosure period ending on 30th January 2015.</li>
                         </ul>
                     </li>
                     <li><strong>23rd October 2014</strong>
-
                         <ul>
                             <li>Vendor responded, confirmed receipt, requested 24 hours to confirm issues.</li>
                         </ul>
                     </li>
                     <li><strong>23rd October 2014</strong>
-
                         <ul>
                             <li>Vendor responded, requested firmware version in use. Suggested using latest firmware.</li>
                             <li>Contacted vendor via email, informed them that all firmware versions are vulnerable.</li>
                         </ul>
                     </li>
                     <li><strong>27th October 2014</strong>
-
                         <ul>
                             <li>Vendor responded via email, indicated work will be done without further communication.</li>
                             <li>Contacted vendor via email, requested updates on progress.</li>
                         </ul>
                     </li>
                     <li><strong>02nd November 2014</strong>
-
                         <ul>
                             <li>Contacted vendor via email, requested confirmation of receipt of previous email.</li>
                             <li>Vendor responded, indicated communications will remain open.</li>
                         </ul>
                     </li>
                     <li><strong>09th November 2014</strong>
-
                         <ul>
                             <li>MITRE responded with thorough email about prior work, and CVE allocation.</li>
                         </ul>
                     </li>
                     <li><strong>17th November 2014</strong>
-
                         <ul>
                             <li>Contacted vendor via email, requested status update.</li>
                         </ul>
                     </li>
                     <li><strong>02nd December 2014</strong>
-
                         <ul>
                             <li>Contacted vendor again via email, requested status update.</li>
                         </ul>
                     </li>
                     <li><strong>16th December 2014</strong>
-
                         <ul>
                             <li>Contacted vendor again via Twitter, requested status update.</li>
                             <li>Vendor responded again, email content was the same as what was received 27th October 2014.</li>
@@ -309,116 +294,95 @@
                         </ul>
                     </li>
                     <li><strong>17th December 2014</strong>
-
                         <ul>
                             <li>Vendor responded, requested confirmation of firmware version and asked if SSH is enabled.</li>
                         </ul>
                     </li>
                     <li><strong>19th December 2014</strong>
-
                         <ul>
                             <li>Contacted vendor, informed them that use of SSH is irrelevant, as is the firmware version.</li>
                         </ul>
                     </li>
                     <li><strong>01st January 2015</strong>
-
                         <ul>
                             <li>Contacted a number of vendor employees via Linked In.</li>
                         </ul>
                     </li>
                     <li><strong>09th January 2015</strong>
-
                         <ul>
                             <li>Established contact with vendor employee responsible for security after interaction with a security professional on Twitter.</li>
                             <li>Established secure communications with employee using PGP.</li>
                         </ul>
                     </li>
                     <li><strong>10th January 2015</strong>
-
                         <ul>
                             <li>Second vendor employee responded via Linked In, confirmed receipt of message and indicated knowledge of contact with previous employee. Previous employee will continue handling disclosure.</li>
                         </ul>
                     </li>
                     <li><strong>10th-16th January 2015</strong>
-
                         <ul>
                             <li>Various communications back-and-forth with employee.</li>
                         </ul>
                     </li>
                     <li><strong>16th January 2015</strong>
-
                         <ul>
                             <li>Disclosure documentation rewritten and sent with exploit to employee PGP-encrypted.</li>
                         </ul>
                     </li>
                     <li><strong>17th January 2015</strong>
-
                         <ul>
                             <li>Employee confirmed receipt.</li>
                             <li>Beyond Binary revised public disclosure date to 1st March 2015.</li>
                         </ul>
                     </li>
                     <li><strong>21st January 2015</strong>
-
                         <ul>
                             <li>Contacted employee, requested update.</li>
                         </ul>
                     </li>
                     <li><strong>23rd January 2015</strong>
-
                         <ul>
                             <li>Employee responded, indicated successful exploitation using Proof of Concept code.</li>
                         </ul>
                     </li>
                     <li><strong>30th January 2015</strong>
-
                         <ul>
                             <li>Employee proactively established contact and provided an update.</li>
                         </ul>
                     </li>
                     <li><strong>05th February 2015</strong>
-
                         <ul>
                             <li>Employee again proactively established contact and provided an update.</li>
                         </ul>
                     </li>
                     <li><strong>17th February 2015</strong>
-
                         <ul>
                             <li>Contacted employee to request status update for fixes and timeline for release.</li>
                         </ul>
                     </li>
                     <li><strong>26th February 2015</strong>
-
                         <ul>
                             <li>Employee responded indicating there is no update to be shared.</li>
                         </ul>
                     </li>
                     <li><strong>01st March 2015</strong>
-
                         <ul>
                             <li>Public disclosure.</li>
                         </ul>
                     </li>
                     <li><strong>April 2015 (day unknown)</strong>
-
                         <ul>
                             <li>Seagate released <a href="http://www.seagate.com/au/en/support/downloads/item/business-nas-4bay-firmware-master-dl/">firmware version 2015.00322</a> to address security issues (<a href="http://www.seagate.com/au/en/support/external-hard-drives/network-storage/business-storage-4-bay-nas/4-bay-release-notes-00319/">release notes</a>).</li>
                         </ul>
                     </li>
                 </ul>
-
-
-
             </article>
-
 
             <aside class="col-md-4 col-md-offset-1">
                 <h2 class="blue-line-through-md"><span>Recent&nbsp;</span></h2>
-                
                 <article>
                     <header>
-                        <span class="date">March 10 2015</span>
+                        <span class="date">10 March 2015</span>
                         <h4 class="text-header upper-case">Opinion: Seagate's Analysis is Incorrect</h4>
                     </header>
                     <div class="small-text text-black">
@@ -428,112 +392,95 @@
                         </ul>
                     </div>
                     <footer>
-                        <a class="tag" href="#">opinion</a>
-                        <a class="tag" href="#">seagate</a>
+                        <a class="tag" href="/tags/opinion/">Opinion</a>
+                        <a class="tag" href="/tags/seagate/">Seagate</a>
                     </footer>
                 </article>
 
                 <article>
                     <header>
-                        <span class="date">March 1 2015</span>
+                        <span class="date">1 March 2015</span>
                         <h4 class="text-header upper-case">Advisory: Seagate NAS Remote Code Execution Vulnerability</h4>
                     </header>
                     <div class="small-text text-black">
                         <p>Seagate is a well-known vendor of hardware solutions, with products available worldwide. Its line of NAS products targeted at businesses is called Business Storage 2-Bay NAS. These can be found inside home and business networks, and in many cases they are publicly exposed.</p>
                     </div>
                     <footer>
-                        <a class="tag" href="#">exploit</a>
-                        <a class="tag" href="#">opinion</a>
-                        <a class="tag" href="#">cve</a>
+                        <a class="tag" href="/tags/advisory/">Advisory</a>
+                        <a class="tag" href="/tags/cve/">CVE</a>
+                        <a class="tag" href="/tags/exploit/">Exploit</a>
+                        <a class="tag" href="/tags/seagate/">Seagate</a>
                     </footer>
                 </article>
 
                 <article>
                     <header>
-                        <span class="date">February 4 2015</span>
+                        <span class="date">4 February 2015</span>
                         <h4 class="text-header upper-case">Advisory: TeamCity Account Creation</h4>
                     </header>
                     <div class="small-text text-black">
                         <p>TeamCity is a multi-platform continuous integration and build server product created by JetBrains. It is used by many development organisations to automate the build and deployment of software solutions as part of the development process. TeamCity is a very popular product and hence the number of installations, both public and private, is quite high.</p>
                     </div>
                     <footer>
-                        <a class="tag" href="#">exploit</a>
-                        <a class="tag" href="#">teamcity</a>
-                        <a class="tag" href="#">cve</a>
+                        <a class="tag" href="/tags/advisory/">Advisory</a>
+                        <a class="tag" href="/tags/cve/">CVE</a>
+                        <a class="tag" href="/tags/exploit/">Exploit</a>
+                        <a class="tag" href="/tags/teamcity/">TeamCity</a>
                     </footer>
                 </article>
 
                 <p>
-                    <a href="#" class="button full-width-xs">View older news articles</a>
+                    <a href="/articles/" class="button full-width-xs">View older articles</a>
                 </p>
-
             </aside>
-            
         </div>
-
-
     </div>
 </section>
 
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="table-row">
-                    <div class="cell-sm col-sm-2 text-center">
-                        <p>
-                            <a href="index.html"><img src="images/beyond-binary-logo.png" srcset="images/beyond-binary-logo@2x.png 2x" alt="" /></a>
-                        </p>
-                    </div>
-
-                    <div class="cell-sm col-sm-10">
-
-                        <div class="row">
-                            <div class="col-sm-11 col-sm-offset-1">
-                                <p>
-                                    Australian businesses are becoming more appealing targets. <br />
-                                    it’s past time that we paid attention. <span class="text-blue">Mar 31</span>
-                                </p>
-                                <hr />
-                                <ul class="footer-navigation">
-                                    <li><a href="index.html">home</a></li>
-                                    <li><a href="about-us.html">about us</a></li>
-                                    <li><a href="services.html">services</a></li>
-                                    <li><a href="news.html">news</a></li>
-                                    <li><a href="#">media</a></li>
-                                    <li><a href="contact-us.html">contact</a></li>
-                                </ul>
-                                <p class="small-text">
-                                    &copy; Beyond Binary Pty Ltd ABN 74 147 311 972
-                                </p>
-                            </div>
-                        </div>
-
-                        
-                    </div>   
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="table-row">
+                <div class="cell-sm col-sm-2 text-center">
+                    <p>
+                        <a href="/"><img src="/images/beyond-binary-logo.png" srcset="/images/beyond-binary-logo@2x.png 2x" alt="" /></a>
+                    </p>
                 </div>
-                
+
+                <div class="cell-sm col-sm-10">
+                    <div class="row">
+                        <div class="col-sm-11 col-sm-offset-1">
+                          <p><a href="https://twitter.com/BeyondBase2/status/620777646499041280">14 July 2015:&nbsp;</a>If you’re relying on product for your security, whether it be hardware or software, you need to re-evaluate your stance. <a href="https://twitter.com/hashtag/everythingisbroken?src=hash">#everythingisbroken</a></p>
+                            <hr />
+                            <ul class="footer-navigation">
+                                <li><a href="/">home</a></li>
+                                <li><a href="/about/">about</a></li>
+                                <li><a href="/services/">services</a></li>
+                                <li><a href="/articles/">articles</a></li>
+                                <li><a href="/contact/">contact</a></li>
+                                <li><a href="/media/">media</a></li>
+                            </ul>
+                            <p class="small-text">
+                                &copy; Beyond Binary Pty Ltd - ABN 74 147 311 972
+                            </p>
+                        </div>
+                    </div>
+                </div>   
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
     
 <script src="/js/lib/jquery-1.11.3.min.js"></script>
-    <script src="js/lib/jquery-ui.min.js"></script>
-    
-    <script src="js/lib/snap.svg-min.js"></script>
-    
-    <script src="js/equal-height.js"></script>
-    <script src="js/menu-burger.js?3"></script>
-    
-    <script src="js/hero/hero.js?9"></script>
-    <script src="js/hero/texts.js?9"></script>
-    <script src="js/hero/bar.js?9"></script>
-    <script src="js/hero/morph.js?9"></script>
-
-    <script src="js/notification.js"></script>
-
-    <script src="js/contact-form.js"></script>
-
-
-
+<script src="/js/lib/jquery-ui.min.js"></script>
+<script src="/js/lib/snap.svg-min.js"></script>
+<script src="/js/equal-height.js"></script>
+<script src="/js/menu-burger.js?3"></script>
+<script src="/js/hero/hero.js?9"></script>
+<script src="/js/hero/texts.js?9"></script>
+<script src="/js/hero/bar.js?9"></script>
+<script src="/js/hero/morph.js?9"></script>
+<script src="/js/notification.js"></script>
+<script src="/js/contact-form.js"></script>
 
 </body>
