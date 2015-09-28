@@ -124,6 +124,10 @@ a.u, .u{
     text-decoration: underline;
 }
 
+h4 a, h4 a:hover, h4 a:focus{
+    color: #191919;
+}
+
 .text-large { font-size: 1.9em; line-height: 1.3em }
 @media (min-width: 640px){
     .text-large { font-size: 2.85em }
@@ -256,6 +260,12 @@ code,pre{
     font-family: Monaco,Menlo,"Courier New",monospace;
     font-size: 0.9em;
     font-weight: bold;
+}
+
+pre{
+  border: solid 1px #dddddd;
+  padding: 10px;
+  overflow-x: scroll;
 }
 
 .scale-75{

