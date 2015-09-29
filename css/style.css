@@ -199,10 +199,8 @@ hr{
     display: inline-block;
     padding: .5em 1em;
     font-size: .85em;
-}
-
-.tag + .tag{
-    margin-left: .25em;
+    margin-right: .25em;
+    margin-bottom: .8em;
 }
 
 .text-pink{
@@ -503,7 +501,7 @@ article header .more:after{
 
 article footer{
     border-top: 2px solid #20aae1;
-    padding: 1.8em 0;
+    padding: 1.8em 0 1em;
     margin-top: 1.8em;
 }
 
