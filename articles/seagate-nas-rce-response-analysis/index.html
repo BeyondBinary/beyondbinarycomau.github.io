@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en-US">
-<head>
+  <head>
     <title>Beyond Binary - Opinion: Seagate's Analysis is Incorrect</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        
+
     <link rel="stylesheet" href="/css/style.css?7" />
     <link rel="icon" type="iamge/png" href="https://beyondbinary.io/images/favicon.png" />
     <link rel="shortcut" type="iamge/png" href="https://beyondbinary.io/images/favicon.png" />
@@ -12,231 +12,245 @@
     <link rel="canonical" href="https://beyondbinary.io/articles/seagate-nas-rce-response-analysis/" />
 
     <!--[if lt IE 9]>
-        <script src="/js/lib/html5shiv.js"></script>
-        <script src="/js/lib/ie8.js"></script>
-        <script src="/js/lib/respond.min.js"></script>
+      <script src="/js/lib/html5shiv.js"></script>
+      <script src="/js/lib/ie8.js"></script>
+      <script src="/js/lib/respond.min.js"></script>
     <![endif]-->
-</head>
-<body>
-<header>
-    <div class="container">
+  </head>
+  <body>
+    <header>
+      <div class="container">
         <div class="row">
-            <div class="table-row">
-                <div class="col-xs-4 col-sm-3 cell-xs">
-                    <a href="/">
-                        <img src="/images/beyond-binary-logo.png" srcset="/images/beyond-binary-logo@2x.png 2x" alt="" />
-                    </a>
-                </div>
-                <div class="col-xs-8 col-sm-9 cell-xs text-right position-static">
-                    <ul class="header-navigation">
-                        <li><a href="/">home</a></li>
-                        <li><a href="/about/">about</a></li>
-                        <li><a href="/services/">services</a></li>
-                        <li><a href="/articles/">articles</a></li>
-                        <li><a href="/contact/">contact</a></li>
-                        <li><a href="/media/">media</a></li>
-                    </ul>
-                    <svg id="menu-burger" width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-                        <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.0916789,20.818994 53.8166421,0"/>
-                        <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.1969746,31.909063 53.8166424,0"/>
-                        <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.0916788,42.95698 53.8166422,0"/>
-                    </svg>
-                </div>
+          <div class="table-row">
+            <div class="col-xs-4 col-sm-3 cell-xs">
+              <a href="/">
+                <img src="/images/beyond-binary-logo.png" srcset="/images/beyond-binary-logo@2x.png 2x" alt="" />
+              </a>
             </div>
+            <div class="col-xs-8 col-sm-9 cell-xs text-right position-static">
+              <ul class="header-navigation">
+                <li><a href="/">home</a></li>
+                <li><a href="/about/">about</a></li>
+                <li><a href="/services/">services</a></li>
+                <li><a href="/articles/">articles</a></li>
+                <li><a href="/contact/">contact</a></li>
+                <li><a href="/media/">media</a></li>
+              </ul>
+              <svg id="menu-burger" width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.0916789,20.818994 53.8166421,0"/>
+                <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.1969746,31.909063 53.8166424,0"/>
+                <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.0916788,42.95698 53.8166422,0"/>
+              </svg>
+            </div>
+          </div>
         </div>
-    </div>
-    <img class="sticky-morph" src="/images/sticky-morph.png" srcset="/images/sticky-morph@2x.png 2x" alt="" />
-</header>
+      </div>
+      <img class="sticky-morph" src="/images/sticky-morph.png" srcset="/images/sticky-morph@2x.png 2x" alt="" />
+    </header>
 
-<section>
-    <div class="container">
-        <h2 class="blue-line-through-md"><span>Advisories &amp; news&nbsp;</span></h2>
+    <section>
+      <div class="container">
+        <h2 class="blue-line-through-md"><span>Articles &amp; News&nbsp;</span></h2>
         <div class="row">
-            <article class="col-md-7">
-                <header>
-                    <span class="date">10 March 2015</span>
-                    <h1>Opinion: Seagate's Analysis is Incorrect</h1>
-                    <a class="tag" href="/tags/opinion/">Opinion</a>
-                    <a class="tag" href="/tags/seagate/">Seagate</a>
-                </header>
+          <article class="col-md-7">
+            <header>
+              <span class="date">10 March 2015</span>
+              <h1>Opinion: Seagate's Analysis is Incorrect</h1>
+              <a class="tag" href="/tags/opinion/">Opinion</a>
+              <a class="tag" href="/tags/seagate/">Seagate</a>
+            </header>
 
-                <h2>Context</h2>
+            <h2>Context</h2>
 
-                <p>On March 1st 2015 Beyond Binary went public with an <a href="/articles/seagate-nas-rce">advisory</a> that disclosed 0day flaws in <a href="http://www.seagate.com/au/en/support/external-hard-drives/network-storage/business-storage-2-bay-nas/">Seagate Business Storage 2-Bay NAS</a> devices. Days later, Seagate responded to the advisory through a number of channels:</p>
+            <p>On March 1st 2015 Beyond Binary went public with an <a href="/articles/seagate-nas-rce">advisory</a> that disclosed 0day flaws in <a href="http://www.seagate.com/au/en/support/external-hard-drives/network-storage/business-storage-2-bay-nas/">Seagate Business Storage 2-Bay NAS</a> devices. Days later, Seagate responded to the advisory through a number of channels:</p>
 
-                <ul>
-                  <li>A direct email to Beyond Binary.</li>
-                  <li>A public announcement on their website.</li>
-                  <li>An email to journalists who wrote news articles about the disclosure experience.</li>
-                </ul>
+            <ul>
+              <li>A direct email to Beyond Binary.</li>
+              <li>A public announcement on their website.</li>
+              <li>An email to journalists who wrote news articles about the disclosure experience.</li>
+            </ul>
 
-                <p>The email that was sent to Beyond Binary was as follows:</p>
+            <p>The email that was sent to Beyond Binary was as follows:</p>
 
-                <blockquote class="full-screen-sm">
-                    <p>Dear OJ,</p>
-                    <p>We appreciate your communication and willingness to work with Seagate in order to improve our products and ensure security for our customers.</p>
-                    <p>We apologize that our communication did not result in a true collaboration and ultimately a timely vulnerability fix. We remain committed to our customer's security and have taken action to develop a patch for download, which is expected to be available May 2015.</p>
-                    <p>We have also provided our customers with the following article should they want to take immediate action to secure their products.</p>
-                    <p class="text-overflow"><a href="http://knowledge.seagate.com/articles/en_US/FAQ/006133en?language=en_US">http://knowledge.seagate.com/articles/en_US/FAQ/006133en?language=en_US</a></p>
-                    <p>We welcome continued work with you and are available should you have any questions.</p>
-                    <p>[name redacted] Engineering Director [phone redacted]</p>
-                    <p>[name redacted] PR Manager [phone redacted]</p>
-                    <p>Best regards, [name redacted]</p>
-                </blockquote>
+            <blockquote class="full-screen-sm">
+              <p>Dear OJ,</p>
+              <p>We appreciate your communication and willingness to work with Seagate in order to improve our products and ensure security for our customers.</p>
+              <p>We apologize that our communication did not result in a true collaboration and ultimately a timely vulnerability fix. We remain committed to our customer's security and have taken action to develop a patch for download, which is expected to be available May 2015.</p>
+              <p>We have also provided our customers with the following article should they want to take immediate action to secure their products.</p>
+              <p class="text-overflow"><a href="http://knowledge.seagate.com/articles/en_US/FAQ/006133en?language=en_US">http://knowledge.seagate.com/articles/en_US/FAQ/006133en?language=en_US</a></p>
+              <p>We welcome continued work with you and are available should you have any questions.</p>
+              <p>[name redacted] Engineering Director [phone redacted]</p>
+              <p>[name redacted] PR Manager [phone redacted]</p>
+              <p>Best regards, [name redacted]</p>
+            </blockquote>
 
-                <p>This response was clearly lacking in detail compared to the response received by journalists:</p>
+            <p>This response was clearly lacking in detail compared to the response received by journalists:</p>
 
-                <blockquote class="full-screen-sm">
-                    <p>Hi [name redacted],</p>
-                    <p>I wanted to share the below statement from Seagate following your recent query with regards to the zero day threat targeting Seagate NAS devices</p>
-                    <p>‘After careful analysis, Seagate has confirmed that the vulnerability on our Business Storage NAS products is low risk and affects only those Business Storage NAS products used on networks that are publicly accessible via the Internet.</p>
-                    <p>With factory settings, Business NAS products are not vulnerable. The user has to intentionally change a default setting to become susceptible.</p>
-                    <p>All Business Storage NAS customers are encouraged to follow the instructions outlined in the article linked below to ensure the product is secure and inaccessible by an unauthorized third party. Additionally, Seagate recommends as a best practice that customers secure their internal network by implementing a firewall.</p>
-                    <p>For those customers who choose to keep their networks open, Seagate will be issuing a software patch for download expected May, 2015.</p>
-                    <p class="text-overflow"><a href="http://knowledge.seagate.com/articles/en_US/FAQ/006133en?language=en_US">http://knowledge.seagate.com/articles/en_US/FAQ/006133en?language=en_US</a></p>
-                    <p>We encourage you to update your articles and would welcome additional questions.’</p>
-                    <p>Thanks, [name redacted]</p>
-                </blockquote>
+            <blockquote class="full-screen-sm">
+              <p>Hi [name redacted],</p>
+              <p>I wanted to share the below statement from Seagate following your recent query with regards to the zero day threat targeting Seagate NAS devices</p>
+              <p>‘After careful analysis, Seagate has confirmed that the vulnerability on our Business Storage NAS products is low risk and affects only those Business Storage NAS products used on networks that are publicly accessible via the Internet.</p>
+              <p>With factory settings, Business NAS products are not vulnerable. The user has to intentionally change a default setting to become susceptible.</p>
+              <p>All Business Storage NAS customers are encouraged to follow the instructions outlined in the article linked below to ensure the product is secure and inaccessible by an unauthorized third party. Additionally, Seagate recommends as a best practice that customers secure their internal network by implementing a firewall.</p>
+              <p>For those customers who choose to keep their networks open, Seagate will be issuing a software patch for download expected May, 2015.</p>
+              <p class="text-overflow"><a href="http://knowledge.seagate.com/articles/en_US/FAQ/006133en?language=en_US">http://knowledge.seagate.com/articles/en_US/FAQ/006133en?language=en_US</a></p>
+              <p>We encourage you to update your articles and would welcome additional questions.’</p>
+              <p>Thanks, [name redacted]</p>
+            </blockquote>
 
-                <p>It is not clear why the extra detail was excluded in the first email. However, what is clear is that both emails are attempting to control brand damage, and in down-playing the severity of the problem are misleading their customers.</p>
+            <p>It is not clear why the extra detail was excluded in the first email. However, what is clear is that both emails are attempting to control brand damage, and in down-playing the severity of the problem are misleading their customers.</p>
 
-                <h2>Breakdown</h2>
+            <h2>Breakdown</h2>
 
-                <blockquote class="full-screen-sm">
-                    After careful analysis, Seagate has confirmed that the vulnerability on our Business Storage NAS products is low risk ...
-                </blockquote>
+            <blockquote class="full-screen-sm">
+              After careful analysis, Seagate has confirmed that the vulnerability on our Business Storage NAS products is low risk ...
+            </blockquote>
 
-                <p>This is incorrect. The ability to perform remote code execution on any device as the <code>root</code> user, pre-authenticated, is not considered "low risk". According to the CVSS 2 scoring system, this vulnerability achieves a base score of <a href="https://bitbucket.org/OJ/bbweb/src/a68753068b9318f7de360977abdf69d71a66e36f/content/opinion/seagate-nas-rce-response-analysis.md?at=master&fileviewer=file-view-default">10</a>: <code>(AV:N/AC:L/Au:N/C:C/I:C/A:C)</code>.</p>
+            <p>This is incorrect. The ability to perform remote code execution on any device as the <code>root</code> user, pre-authenticated, is not considered "low risk". According to the CVSS 2 scoring system, this vulnerability achieves a base score of <a href="https://bitbucket.org/OJ/bbweb/src/a68753068b9318f7de360977abdf69d71a66e36f/content/opinion/seagate-nas-rce-response-analysis.md?at=master&fileviewer=file-view-default">10</a>: <code>(AV:N/AC:L/Au:N/C:C/I:C/A:C)</code>.</p>
 
-                <blockquote class="full-screen-sm">
-                  ... and affects only those Business Storage NAS products used on networks that are publicly accessible via the Internet.
-                </blockquote>
+            <blockquote class="full-screen-sm">
+              ... and affects only those Business Storage NAS products used on networks that are publicly accessible via the Internet.
+            </blockquote>
 
-                <p>This is also incorrect. Attackers simply need to be able to reach the device. It is possible to reach such devices via a number of paths including network pivots. This response also fails to take into account internal employees or other people with physical access to the same network (such as subcontractors). Prevention of public access to the device only reduces the CVSS 2 base score by 1.7 points to <a href="https://bitbucket.org/OJ/bbweb/src/a68753068b9318f7de360977abdf69d71a66e36f/content/opinion/seagate-nas-rce-response-analysis.md?at=master&fileviewer=file-view-default">8.3</a>: <code>(AV:A/AC:L/Au:N/C:C/I:C/A:C)</code>.</p>
+            <p>This is also incorrect. Attackers simply need to be able to reach the device. It is possible to reach such devices via a number of paths including network pivots. This response also fails to take into account internal employees or other people with physical access to the same network (such as subcontractors). Prevention of public access to the device only reduces the CVSS 2 base score by 1.7 points to <a href="https://bitbucket.org/OJ/bbweb/src/a68753068b9318f7de360977abdf69d71a66e36f/content/opinion/seagate-nas-rce-response-analysis.md?at=master&fileviewer=file-view-default">8.3</a>: <code>(AV:A/AC:L/Au:N/C:C/I:C/A:C)</code>.</p>
 
-                <blockquote class="full-screen-sm">
-                With factory settings, Business NAS products are not vulnerable. The user has to intentionally change a default setting to become susceptible.
-                </blockquote>
+            <blockquote class="full-screen-sm">
+              With factory settings, Business NAS products are not vulnerable. The user has to intentionally change a default setting to become susceptible.
+            </blockquote>
 
-                <p>Again, incorrect. The NAS device has a web-based administrative portal which is enabled by default. If the web portal is available, the device can be compromised, as this is where the vulnerable code lies. Seagate are, again, incorrectly claiming that devices that aren't Internet-facing are safe.</p>
+            <p>Again, incorrect. The NAS device has a web-based administrative portal which is enabled by default. If the web portal is available, the device can be compromised, as this is where the vulnerable code lies. Seagate are, again, incorrectly claiming that devices that aren't Internet-facing are safe.</p>
 
-                <blockquote class="full-screen-sm">
-                For those customers who choose to keep their networks open, Seagate will be issuing a software patch for download expected May, 2015.
-                </blockquote>
+            <blockquote class="full-screen-sm">
+              For those customers who choose to keep their networks open, Seagate will be issuing a software patch for download expected May, 2015.
+            </blockquote>
 
-                <p>This timeline is unacceptable. May 2015 is 6 months after the initial disclosure and 4 months after the second disclosure. Resolution of the problems should be considered a much higher priority and a patch should be made available much sooner. This timeline is another indication of the level of commitment that Seagate has towards protecting its customers.</p>
+            <p>This timeline is unacceptable. May 2015 is 6 months after the initial disclosure and 4 months after the second disclosure. Resolution of the problems should be considered a much higher priority and a patch should be made available much sooner. This timeline is another indication of the level of commitment that Seagate has towards protecting its customers.</p>
 
-                <h2>Conclusion</h2>
+            <h2>Conclusion</h2>
 
-                <p>Seagate's handling of this disclosure has been poor, to say the least. Down-playing the issues in this way may lead customers into thinking that the vulnerability isn't severe, resulting in a lack of action on the customer's behalf. The lack of action in producing a fix for these issues is an indication of the level of importance Seagate places on keeping customers secure.</p>
+            <p>Seagate's handling of this disclosure has been poor, to say the least. Down-playing the issues in this way may lead customers into thinking that the vulnerability isn't severe, resulting in a lack of action on the customer's behalf. The lack of action in producing a fix for these issues is an indication of the level of importance Seagate places on keeping customers secure.</p>
 
-                <p>To those people considering purchasing a NAS solution, Beyond Binary recommends considering other vendors with a more proactive and responsive security position.</p>
+            <p>To those people considering purchasing a NAS solution, Beyond Binary recommends considering other vendors with a more proactive and responsive security position.</p>
 
+          </article>
+
+          <aside class="col-md-4 col-md-offset-1">
+            <h2 class="blue-line-through-md"><span>Recent&nbsp;</span></h2>
+            <article>
+              <header>
+                <span class="date">01 August 2017</span>
+                <h4 class="text-header upper-case"><a href="/articles/bypassing-messagelabs/">TTP: Bypassing Symantec Email Security.cloud (MessageLabs)</a></h4>
+              </header>
+              <div class="small-text text-black">
+                <p>During a recent Attack Simulation against a high-profile client, Beyond Binary faced off against Symantec Email Security.cloud (formerly MessageLabs) whilst conducting a variety of phishing campaigns. This was not the first time we had come up against cloud-based email security services, however our usual approaches to bypassing them didn't yield any fruit.</p>
+              </div>
+              <footer>
+                <a class="tag" href="/tags/messagelabs/">MessageLabs</a>
+                <a class="tag" href="/tags/ttp/">TTP</a>
+              </footer>
             </article>
 
-            <aside class="col-md-4 col-md-offset-1">
-                <h2 class="blue-line-through-md"><span>Recent&nbsp;</span></h2>
-                <article>
-                    <header>
-                        <span class="date">10 March 2015</span>
-                        <h4 class="text-header upper-case"><a href="/articles/seagate-nas-rce-response-analysis/">Opinion: Seagate's Analysis is Incorrect</a></h4>
-                    </header>
-                    <div class="small-text text-black">
-                        <p>On March 1st 2015 Beyond Binary went public with an advisory that disclosed 0day flaws in Seagate Business Storage 2-Bay NAS devices. Days later, Seagate responded to the advisory through a number of channels:</p>
-                        <ul>
-                            <li>A direct email to Beyond Binary</li>
-                        </ul>
-                    </div>
-                    <footer>
-                        <a class="tag" href="/tags/opinion/">Opinion</a>
-                        <a class="tag" href="/tags/seagate/">Seagate</a>
-                    </footer>
-                </article>
+            <article>
+              <header>
+                <span class="date">10 March 2015</span>
+                <h4 class="text-header upper-case"><a href="/articles/seagate-nas-rce-response-analysis/">Opinion: Seagate's Analysis is Incorrect</a></h4>
+              </header>
+              <div class="small-text text-black">
+                <p>On March 1st 2015 Beyond Binary went public with an advisory that disclosed 0day flaws in Seagate Business Storage 2-Bay NAS devices. Days later, Seagate responded to the advisory through a number of channels:</p>
+                <ul>
+                  <li>A direct email to Beyond Binary</li>
+                </ul>
+              </div>
+              <footer>
+                <a class="tag" href="/tags/opinion/">Opinion</a>
+                <a class="tag" href="/tags/seagate/">Seagate</a>
+              </footer>
+            </article>
 
-                <article>
-                    <header>
-                        <span class="date">1 March 2015</span>
-                        <h4 class="text-header upper-case"><a href="/articles/seagate-nas-rce/">Advisory: Seagate NAS Remote Code Execution Vulnerability</a></h4>
-                    </header>
-                    <div class="small-text text-black">
-                        <p>Seagate is a well-known vendor of hardware solutions, with products available worldwide. Its line of NAS products targeted at businesses is called Business Storage 2-Bay NAS. These can be found inside home and business networks, and in many cases they are publicly exposed.</p>
-                    </div>
-                    <footer>
-                        <a class="tag" href="/tags/advisory/">Advisory</a>
-                        <a class="tag" href="/tags/cve/">CVE</a>
-                        <a class="tag" href="/tags/exploit/">Exploit</a>
-                        <a class="tag" href="/tags/seagate/">Seagate</a>
-                    </footer>
-                </article>
+            <article>
+              <header>
+                <span class="date">1 March 2015</span>
+                <h4 class="text-header upper-case"><a href="/articles/seagate-nas-rce/">Advisory: Seagate NAS Remote Code Execution Vulnerability</a></h4>
+              </header>
+              <div class="small-text text-black">
+                <p>Seagate is a well-known vendor of hardware solutions, with products available worldwide. Its line of NAS products targeted at businesses is called Business Storage 2-Bay NAS. These can be found inside home and business networks, and in many cases they are publicly exposed.</p>
+              </div>
+              <footer>
+                <a class="tag" href="/tags/advisory/">Advisory</a>
+                <a class="tag" href="/tags/cve/">CVE</a>
+                <a class="tag" href="/tags/exploit/">Exploit</a>
+                <a class="tag" href="/tags/seagate/">Seagate</a>
+              </footer>
+            </article>
 
-                <article>
-                    <header>
-                        <span class="date">4 February 2015</span>
-                        <h4 class="text-header upper-case"><a href="/articles/teamcity-account-creation/">Advisory: TeamCity Account Creation</a></h4>
-                    </header>
-                    <div class="small-text text-black">
-                        <p>TeamCity is a multi-platform continuous integration and build server product created by JetBrains. It is used by many development organisations to automate the build and deployment of software solutions as part of the development process. TeamCity is a very popular product and hence the number of installations, both public and private, is quite high.</p>
-                    </div>
-                    <footer>
-                        <a class="tag" href="/tags/advisory/">Advisory</a>
-                        <a class="tag" href="/tags/cve/">CVE</a>
-                        <a class="tag" href="/tags/exploit/">Exploit</a>
-                        <a class="tag" href="/tags/teamcity/">TeamCity</a>
-                    </footer>
-                </article>
+            <article>
+              <header>
+                <span class="date">4 February 2015</span>
+                <h4 class="text-header upper-case"><a href="/articles/teamcity-account-creation/">Advisory: TeamCity Account Creation</a></h4>
+              </header>
+              <div class="small-text text-black">
+                <p>TeamCity is a multi-platform continuous integration and build server product created by JetBrains. It is used by many development organisations to automate the build and deployment of software solutions as part of the development process. TeamCity is a very popular product and hence the number of installations, both public and private, is quite high.</p>
+              </div>
+              <footer>
+                <a class="tag" href="/tags/advisory/">Advisory</a>
+                <a class="tag" href="/tags/cve/">CVE</a>
+                <a class="tag" href="/tags/exploit/">Exploit</a>
+                <a class="tag" href="/tags/teamcity/">TeamCity</a>
+              </footer>
+            </article>
 
-                <p>
-                    <a href="/articles/" class="button full-width-xs">View older articles</a>
-                </p>
-            </aside>
+            <p>
+            <a href="/articles/" class="button full-width-xs">View older articles</a>
+            </p>
+          </aside>
         </div>
-    </div>
-</section>
+      </div>
+    </section>
 
-<footer>
-    <div class="container">
+    <footer>
+      <div class="container">
         <div class="row">
-            <div class="table-row">
-                <div class="cell-sm col-sm-2 text-center">
-                    <p>
-                        <a href="/"><img src="/images/beyond-binary-logo.png" srcset="/images/beyond-binary-logo@2x.png 2x" alt="" /></a>
-                    </p>
-                </div>
-
-                <div class="cell-sm col-sm-10">
-                    <div class="row">
-                        <div class="col-sm-11 col-sm-offset-1">
-                          <p><a href="https://twitter.com/BeyondBase2/status/620777646499041280">14 July 2015:&nbsp;</a>If you’re relying on product for your security, whether it be hardware or software, you need to re-evaluate your stance. <a href="https://twitter.com/hashtag/everythingisbroken?src=hash">#everythingisbroken</a></p>
-                            <hr />
-                            <ul class="footer-navigation">
-                                <li><a href="/">home</a></li>
-                                <li><a href="/about/">about</a></li>
-                                <li><a href="/services/">services</a></li>
-                                <li><a href="/articles/">articles</a></li>
-                                <li><a href="/contact/">contact</a></li>
-                                <li><a href="/media/">media</a></li>
-                            </ul>
-                            <p class="small-text">
-                                &copy; Beyond Binary Pty Ltd - ABN 64 146 311 962
-                            </p>
-                        </div>
-                    </div>
-                </div>   
+          <div class="table-row">
+            <div class="cell-sm col-sm-2 text-center">
+              <p>
+              <a href="/"><img src="/images/beyond-binary-logo.png" srcset="/images/beyond-binary-logo@2x.png 2x" alt="" /></a>
+              </p>
             </div>
-        </div>
-    </div>
-</footer>
-    
-<script src="/js/lib/jquery-1.11.3.min.js"></script>
-<script src="/js/lib/jquery-ui.min.js"></script>
-<script src="/js/lib/snap.svg-min.js"></script>
-<script src="/js/equal-height.js"></script>
-<script src="/js/menu-burger.js?3"></script>
-<script src="/js/hero/hero.js?9"></script>
-<script src="/js/hero/texts.js?9"></script>
-<script src="/js/hero/bar.js?9"></script>
-<script src="/js/hero/morph.js?9"></script>
-<script src="/js/notification.js"></script>
-<script src="/js/contact-form.js"></script>
 
-</body>
+            <div class="cell-sm col-sm-10">
+              <div class="row">
+                <div class="col-sm-11 col-sm-offset-1">
+                  <p><a href="https://twitter.com/BeyondBase2/status/892362430881214464">01 August 2017:&nbsp;</a>Some cloud-based email protection mechanisms are useful. But don’t rely on them, they can and will be bypassed without much effort!</p>
+                  <hr />
+                  <ul class="footer-navigation">
+                    <li><a href="/">home</a></li>
+                    <li><a href="/about/">about</a></li>
+                    <li><a href="/services/">services</a></li>
+                    <li><a href="/articles/">articles</a></li>
+                    <li><a href="/contact/">contact</a></li>
+                    <li><a href="/media/">media</a></li>
+                  </ul>
+                  <p class="small-text">
+                  &copy; Beyond Binary Pty Ltd - ABN 64 146 311 962
+                  </p>
+                </div>
+              </div>
+            </div>   
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/js/lib/jquery-1.11.3.min.js"></script>
+    <script src="/js/lib/jquery-ui.min.js"></script>
+    <script src="/js/lib/snap.svg-min.js"></script>
+    <script src="/js/equal-height.js"></script>
+    <script src="/js/menu-burger.js?3"></script>
+    <script src="/js/hero/hero.js?9"></script>
+    <script src="/js/hero/texts.js?9"></script>
+    <script src="/js/hero/bar.js?9"></script>
+    <script src="/js/hero/morph.js?9"></script>
+    <script src="/js/notification.js"></script>
+    <script src="/js/contact-form.js"></script>
+
+  </body>

