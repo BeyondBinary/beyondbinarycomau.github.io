@@ -68,7 +68,7 @@
 
             <h2>First of all, Payloads!</h2>
 
-            <p>To simulate different attacks we wanted to utilise a number of different payloads, and the first one that was tried as a simple CSV file that contained a well-known <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms648774(v=vs.85).aspx">DDE</a> attack vector to gain code execution. The aim was to invoke a custom payload, bypassing application whitelisting, resulting in active sessions on the target. The method we decided to go with in this instance was the (ab)use of <code>regsvr32</code>, a method <a href="http://subt0x10.blogspot.com.au/2017/04/bypass-application-whitelisting-script.html">researched and documented</a> by <a href="https://twitter.com/subTee">Casey Smith</a>. The required Scriptlet definition was hosted on several redirector servers within our C2 infrastructure.</p>
+            <p>To simulate different attacks we wanted to utilise a number of different payloads, and the first one that was tried was a simple CSV file that contained a well-known <a href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms648774(v=vs.85).aspx">DDE</a> attack vector to gain code execution. The aim was to invoke a custom payload, bypassing application whitelisting, resulting in active sessions on the target. The method we decided to go with in this instance was the (ab)use of <code>regsvr32</code>, a method <a href="http://subt0x10.blogspot.com.au/2017/04/bypass-application-whitelisting-script.html">researched and documented</a> by <a href="https://twitter.com/subTee">Casey Smith</a>. The required Scriptlet definition was hosted on several redirector servers within our C2 infrastructure.</p>
 
             <p>The DDE entry inside the CSV file looked like this:</p>
 
@@ -111,7 +111,7 @@
               <li>Legitimate web pages can be hosted directly via Nginx, and rendered by default. This helps portray the host as a valid webserver in an effort to distract any Blue Team investigations.</li>
             </ul>
 
-            <p>With Nginx already in place for the abov reasons, it made sense to make use of it to help deal with the MessageLabs problem. Now that we understood what was going on with the filtering and URL validation mechanism, we were able to devise a fairly simple solution:</p>
+            <p>With Nginx already in place for the above reasons, it made sense to make use of it to help deal with the MessageLabs problem. Now that we understood what was going on with the filtering and URL validation mechanism, we were able to devise a fairly simple solution:</p>
 
             <ul>
               <li>Determine a set of IP addresses that match the client infrastructure.</li>
