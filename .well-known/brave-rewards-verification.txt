@@ -1,4 +1,4 @@
 This is a Brave Rewards publisher verification file.
 
-Domain: beyondbinary.io
-Token: e8a000359441ce25335022345f140d7dd2b5570c440ebcce18b7d1a3531e972a
+Domain: beyondbinary.com.au
+Token: 2f3c22a62da81af909a37aad57cc6a1315c8358d91dcd2a8f3c0f762417082e0
